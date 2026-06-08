@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolão dos PatiNANAUdores</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --verde:#009C3B;--verde-dark:#007a2e;
+  --amarelo:#FFDF00;--amarelo-dark:#c9b000;
+  --azul:#002776;--azul-mid:#1a4a9e;
+  --branco:#ffffff;--cinza-bg:#f4f6f9;
+}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--cinza-bg);
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;
+}
+
+.container{
+  width:100%;max-width:460px;
+  text-align:center;
+}
+
+.badge{
+  display:inline-block;
+  background:var(--verde);
+  color:#fff;
+  font-size:.75rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:4px 14px;border-radius:20px;
+  margin-bottom:18px;
+}
+
+.title{
+  font-family:'Bebas Neue',cursive;
+  font-size:3rem;
+  color:var(--azul);
+  letter-spacing:3px;
+  line-height:1;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  font-size:.95rem;
+  color:#5a6080;
+  font-weight:600;
+  margin-bottom:40px;
+}
+
+.cards{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.card-link{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:20px 24px;
+  border-radius:14px;
+  text-decoration:none;
+  transition:transform .15s, box-shadow .15s;
+  text-align:left;
+}
+.card-link:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.12);
+}
+
+.card-link.publico{
+  background:var(--azul);
+  border:2px solid var(--azul);
+}
+.card-link.publico:hover{background:var(--azul-mid);}
+
+.card-link.admin{
+  background:var(--branco);
+  border:2px solid #dde3ee;
+}
+.card-link.admin:hover{border-color:var(--azul);}
+
+.card-icon{
+  font-size:2rem;
+  flex-shrink:0;
+  width:48px;text-align:center;
+}
+
+.card-text{}
+.card-label{
+  font-weight:800;
+  font-size:1rem;
+  display:block;
+}
+.card-desc{
+  font-size:.8rem;
+  font-weight:600;
+  opacity:.75;
+  margin-top:2px;
+  display:block;
+}
+
+.card-link.publico .card-label{color:#fff;}
+.card-link.publico .card-desc{color:rgba(255,255,255,.7);}
+.card-link.admin .card-label{color:var(--azul);}
+.card-link.admin .card-desc{color:#5a6080;}
+
+.arrow{
+  margin-left:auto;
+  font-size:1.1rem;
+  opacity:.5;
+  flex-shrink:0;
+}
+.card-link.publico .arrow{color:#fff;}
+.card-link.admin .arrow{color:var(--azul);}
+
+.footer{
+  margin-top:36px;
+  font-size:.72rem;
+  color:#aab;
+  font-weight:600;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="badge">⚽ Copa do Mundo 2026</div>
+  <div class="title">Bolão dos<br>PatiNANAUdores</div>
+  <div class="subtitle">Canada · México · Estados Unidos</div>
+
+  <div class="cards">
+    <a href="publico.html" class="card-link publico">
+      <div class="card-icon">🏆</div>
+      <div class="card-text">
+        <span class="card-label">Ver ranking e resultados</span>
+        <span class="card-desc">Pódio, placar dos jogos e classificação geral</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="bolao_patinauadores.html" class="card-link admin">
+      <div class="card-icon">⚙️</div>
+      <div class="card-text">
+        <span class="card-label">Gerenciar bolão</span>
+        <span class="card-desc">Upload de palpites, resultados e exportação</span>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <div class="footer">FIFA World Cup 2026 · 11 jun — 19 jul</div>
+</div>
+</body>
+</html>
