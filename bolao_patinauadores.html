@@ -512,7 +512,7 @@ function handleCsvJogos(event){
       const colTipos=headers.map(h=>{
         const hn=norm(h);
         if(hn.includes('carimbo')||hn.includes('timestamp'))return{tipo:'timestamp'};
-        if(hn==='nome')return{tipo:'nome'};
+        if(hn==='nome'||hn.startsWith('nome'))return{tipo:'nome'};
         if(hn==='campeao'||hn==='campeão')return{tipo:'podio_camp'};
         if(hn==='vice-campeao'||hn==='vice-campeão'||hn==='vice')return{tipo:'podio_vice'};
         if(hn==='3o lugar'||hn==='3º lugar'||hn==='terceiro')return{tipo:'podio_terc'};
