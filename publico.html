@@ -158,8 +158,13 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
       <button class="btn btn-azul" onclick="toggleExportPub()" id="toggleExportPubBtn" style="font-size:.82rem;padding:8px 16px">Ver tabela completa</button>
     </div>
     <div id="exportInnerPub" style="display:none;margin-top:14px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <p style="font-size:.8rem;color:var(--texto-sec)">Cole direto no Excel ou Google Sheets.</p>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <div style="flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Filtrar:</label>
+          <select class="filter-select" id="exportFiltroPub" onchange="filtrarExportPub()" style="padding:6px 10px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;color:var(--texto);background:#fff;cursor:pointer">
+            <option value="">Todos os participantes</option>
+          </select>
+        </div>
         <button class="copy-btn" id="copyBtnPub" onclick="copiarTabelaPub()">📋 Copiar tudo</button>
       </div>
       <div style="overflow-x:auto">
@@ -330,10 +335,18 @@ function renderRanking(){
   </tr>`).join('')}</tbody></table>`;
   const exportRows=[];
   ranking.forEach(([nome,dados])=>dados.detalhes.forEach(d=>exportRows.push({Participante:nome,Data:fmtData(d.data),Jogo:d.jogo,Palpite:d.placar,Resultado:d.resultado||'Pendente',Pontos:d.pts,Status:d.status})));
-  document.getElementById('exportTableBodyPub').innerHTML=exportRows.map(r=>`<tr><td>${r.Participante}</td><td>${r.Data}</td><td>${r.Jogo}</td><td>${r.Palpite}</td><td>${r.Resultado}</td><td>${r.Pontos}</td><td>${r.Status}</td></tr>`).join('');
+  window._exportRowsAllPub=exportRows;
+  const sel=document.getElementById('exportFiltroPub');
+  if(sel){const nomes=[...new Set(exportRows.map(r=>r.Participante))].sort();sel.innerHTML='<option value="">Todos os participantes</option>'+nomes.map(n=>`<option value="${n}">${n}</option>`).join('');}
+  filtrarExportPub();
   document.getElementById('exportCardPub').style.display='block';
 }
 
+function filtrarExportPub(){
+  const filtro=document.getElementById('exportFiltroPub')?.value||'';
+  const rows=(window._exportRowsAllPub||[]).filter(r=>!filtro||r.Participante===filtro);
+  document.getElementById('exportTableBodyPub').innerHTML=rows.map(r=>`<tr><td>${r.Participante}</td><td>${r.Data}</td><td>${r.Jogo}</td><td>${r.Palpite}</td><td>${r.Resultado}</td><td>${r.Pontos}</td><td>${r.Status}</td></tr>`).join('');
+}
 function toggleExportPub(){const inner=document.getElementById('exportInnerPub'),btn=document.getElementById('toggleExportPubBtn'),open=inner.style.display==='none';inner.style.display=open?'block':'none';btn.textContent=open?'Ocultar tabela':'Ver tabela completa';}
 function copiarTabelaPub(){
   const rows=[['Participante','Data','Jogo','Palpite','Resultado','Pontos','Status'].join('\t')];
