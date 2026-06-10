@@ -20,6 +20,16 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 1,
         "gB": 0
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 2,
+        "gB": 1
       }
     ],
     "M2": [
@@ -42,6 +52,16 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 2,
         "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 0,
+        "gB": 0
       }
     ],
     "M3": [
@@ -190,6 +210,18 @@
       "campeao": "Portugal",
       "vice": "França",
       "terceiro": "Brasil"
+    },
+    {
+      "nome": "Gabriel Oliveira",
+      "campeao": "Espanha",
+      "vice": "França",
+      "terceiro": "Portugal"
+    },
+    {
+      "nome": "Vinicius Cruzero",
+      "campeao": "França",
+      "vice": "Espanha",
+      "terceiro": "Brasil"
     }
   ],
   "podioBloqueado": false,
@@ -208,5 +240,5 @@
     "M12"
   ],
   "jogoAtualResultados": null,
-  "_exportedAt": "2026-06-10T03:29:09.549Z"
+  "_exportedAt": "2026-06-10T13:22:30.440Z"
 }
