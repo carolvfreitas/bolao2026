@@ -155,6 +155,25 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
           <div class="section-label">🏆 Pódio detectado no arquivo</div>
           <div id="podioPreviewFromCsvBody"></div>
         </div>
+        <div class="filter-bar" id="previewFilterBar" style="display:none;margin-bottom:12px">
+          <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Rodada:</label>
+          <select class="filter-select" id="previewFiltroRodada" onchange="onPreviewFiltroRodadaChange()" style="padding:6px 10px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;color:var(--texto);background:#fff;cursor:pointer">
+            <option value="">Todas</option>
+            <option value="1">1ª Rodada</option>
+            <option value="2">2ª Rodada</option>
+            <option value="3">3ª Rodada</option>
+            <option value="16avos">16 avos de final</option>
+            <option value="oitavas">Oitavas de final</option>
+            <option value="quartas">Quartas de final</option>
+            <option value="semis">Semifinais</option>
+            <option value="terceiro">3º lugar</option>
+            <option value="final">Final</option>
+          </select>
+          <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Dia:</label>
+          <select class="filter-select" id="previewFiltroDia" onchange="renderPreviewFiltrado()" style="padding:6px 10px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;color:var(--texto);background:#fff;cursor:pointer">
+            <option value="">Todos</option>
+          </select>
+        </div>
         <div id="jogosPreviewList"></div>
         <div id="jogosSalvosAviso"></div>
         <button class="btn btn-verde btn-block" onclick="salvarTudo()">✅ Salvar tudo</button>
@@ -233,7 +252,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
       </div>
       <div style="overflow-x:auto">
         <table class="export-table">
-          <thead><tr><th>Participante</th><th>Data</th><th>Jogo</th><th>Palpite</th><th>Resultado</th><th>Pontos</th><th>Status</th></tr></thead>
+          <thead><tr><th>Participante</th><th>Rodada</th><th>Data</th><th>Jogo</th><th>Palpite</th><th>Resultado</th><th>Pontos</th><th>Status</th></tr></thead>
           <tbody id="exportTableBody"></tbody>
         </table>
       </div>
@@ -394,8 +413,34 @@ function renderPreview(){
     pdWrap.style.display='block';
     document.getElementById('podioPreviewFromCsvBody').innerHTML=`<div style="overflow-x:auto"><table class="podio-preview-table"><thead><tr><th>Participante</th><th>🥇 Campeão</th><th>🥈 Vice</th><th>🥉 3º Lugar</th></tr></thead><tbody>${podioRows.map(p=>`<tr><td class="nome-cell">${p.nome}</td><td>${renderPaisCell(p.campeao)}</td><td>${renderPaisCell(p.vice)}</td><td>${renderPaisCell(p.terceiro)}</td></tr>`).join('')}</tbody></table></div>`;
   }else pdWrap.style.display='none';
+  // Popula filtro de dias
+  const diasSet=new Set(jogosDetectados.map(jd=>jd.jogo.data));
+  const dias=[...diasSet].sort();
+  const dSel=document.getElementById('previewFiltroDia');
+  dSel.innerHTML='<option value="">Todos</option>'+dias.map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
+  document.getElementById('previewFiltroRodada').value='';
+  document.getElementById('previewFilterBar').style.display='flex';
+  renderPreviewFiltrado();
+}
+
+function onPreviewFiltroRodadaChange(){
+  if(!pendingPreview)return;
+  const rodada=document.getElementById('previewFiltroRodada').value;
+  const diasSet=new Set(pendingPreview.jogosDetectados.filter(jd=>!rodada||jd.jogo.rodada===rodada).map(jd=>jd.jogo.data));
+  const dias=[...diasSet].sort();
+  const dSel=document.getElementById('previewFiltroDia');
+  dSel.innerHTML='<option value="">Todos</option>'+dias.map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
+  renderPreviewFiltrado();
+}
+
+function renderPreviewFiltrado(){
+  if(!pendingPreview)return;
+  const {jogosDetectados,jogoApostasMap,warnings}=pendingPreview;
+  const filtroR=document.getElementById('previewFiltroRodada').value;
+  const filtroD=document.getElementById('previewFiltroDia').value;
+  const jogos=jogosDetectados.filter(jd=>(!filtroR||jd.jogo.rodada===filtroR)&&(!filtroD||jd.jogo.data===filtroD));
   let html='';
-  jogosDetectados.forEach(jd=>{
+  jogos.forEach(jd=>{
     const jogo=jd.jogo,apostas=jogoApostasMap[jogo.id]||[],jaSalvo=state.jogosSalvos.includes(jogo.id);
     html+=`<div class="jogo-preview-block"${jaSalvo?' style="opacity:.6"':''}><div class="jogo-preview-header"><div style="flex:1">
       <div class="jogo-preview-times">${getFlag(jogo.timeA)} ${jogo.timeA} × ${jogo.timeB} ${getFlag(jogo.timeB)}</div>
@@ -406,7 +451,7 @@ function renderPreview(){
     else{html+=`<div class="apostas-rows">`;apostas.forEach(a=>{if(a.bloqueado)html+=`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-warn">⚠️ ${a.motivo}</span></div>`;else html+=`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span></div>`;});html+=`</div>`;}
     html+=`</div>`;
   });
-  document.getElementById('jogosPreviewList').innerHTML=html;
+  document.getElementById('jogosPreviewList').innerHTML=html||`<div class="empty-state" style="padding:20px"><div class="icon">🔍</div>Nenhum jogo para os filtros selecionados.</div>`;
   const av=document.getElementById('jogosSalvosAviso');av.innerHTML=warnings.length?`<div class="alert alert-warn" style="margin-top:8px"><strong>⚠️ Atenção:</strong><br>`+warnings.map(w=>`• ${w}`).join('<br>')+`</div>`:'';
 }
 
@@ -484,11 +529,11 @@ function calcularPontos(){
     const res=state.resultados[jid],jogo=JOGOS.find(j=>j.id===jid);
     state.apostas[jid].forEach(ap=>{
       if(!ps[ap.nome])ps[ap.nome]={pontos:0,exatos:0,detalhes:[]};const p=ps[ap.nome];
-      if(!res){p.detalhes.push({data:jogo?.data,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,pts:0,status:'Aguardando resultado'});return;}
+      if(!res){p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,pts:0,status:'Aguardando resultado'});return;}
       let pts=0,status='Errou';
       if(ap.gA===res.gA&&ap.gB===res.gB){pts=3;status='Placar exato';p.exatos++;}
       else{const vP=ap.gA>ap.gB?'A':ap.gA<ap.gB?'B':'E',vR=res.gA>res.gB?'A':res.gA<res.gB?'B':'E';if(vP===vR){pts=1;status='Vencedor/empate correto';}}
-      p.pontos+=pts;p.detalhes.push({data:jogo?.data,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,resultado:`${res.gA}×${res.gB}`,pts,status});
+      p.pontos+=pts;p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,resultado:`${res.gA}×${res.gB}`,pts,status});
     });
   });
   return Object.entries(ps).sort((a,b)=>b[1].pontos-a[1].pontos||b[1].exatos-a[1].exatos);
@@ -510,7 +555,7 @@ function atualizarRanking(){
   </tr>`).join('')}</tbody></table>`;
   // Export table
   const exportRows=[];
-  ranking.forEach(([nome,dados])=>dados.detalhes.forEach(d=>exportRows.push({Participante:nome,Data:fmtData(d.data),Jogo:d.jogo,Palpite:d.placar,Resultado:d.resultado||'Pendente',Pontos:d.pts,Status:d.status})));
+  ranking.forEach(([nome,dados])=>dados.detalhes.forEach(d=>exportRows.push({Participante:nome,Rodada:ROD_LABELS[d.rodada]||d.rodada||'',Data:fmtData(d.data),Jogo:d.jogo,Palpite:d.placar,Resultado:d.resultado||'Pendente',Pontos:d.pts,Status:d.status})));
   // Guarda todas as linhas globalmente para o filtro
   window._exportRowsAll=exportRows;
   // Popula filtro
@@ -522,7 +567,7 @@ function atualizarRanking(){
 function filtrarExport(){
   const filtro=document.getElementById('exportFiltro')?.value||'';
   const rows=(window._exportRowsAll||[]).filter(r=>!filtro||r.Participante===filtro);
-  document.getElementById('exportTableBody').innerHTML=rows.map(r=>`<tr><td>${r.Participante}</td><td>${r.Data}</td><td>${r.Jogo}</td><td>${r.Palpite}</td><td>${r.Resultado}</td><td>${r.Pontos}</td><td>${r.Status}</td></tr>`).join('');
+  document.getElementById('exportTableBody').innerHTML=rows.map(r=>`<tr><td>${r.Participante}</td><td>${r.Rodada}</td><td>${r.Data}</td><td>${r.Jogo}</td><td>${r.Palpite}</td><td>${r.Resultado}</td><td>${r.Pontos}</td><td>${r.Status}</td></tr>`).join('');
 }
 function toggleExport(){const inner=document.getElementById('exportInner'),btn=document.getElementById('toggleExportBtn'),open=inner.style.display==='none';inner.style.display=open?'block':'none';btn.textContent=open?'Ocultar tabela':'Ver tabela completa';}
 function copiarTabela(){
