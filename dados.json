@@ -151,6 +151,54 @@
         "gA": 0,
         "gB": 0
       }
+    ],
+    "M13": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 5,
+        "gB": 0
+      }
+    ],
+    "M15": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 1,
+        "gB": 2
+      }
+    ],
+    "M14": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 0,
+        "gB": 0
+      }
+    ],
+    "M16": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 2,
+        "gB": 2
+      }
     ]
   },
   "resultados": {},
@@ -192,8 +240,12 @@
     "M5",
     "M34",
     "M10",
-    "M12"
+    "M12",
+    "M13",
+    "M15",
+    "M14",
+    "M16"
   ],
   "jogoAtualResultados": null,
-  "_exportedAt": "2026-06-10T03:02:12.247Z"
+  "_exportedAt": "2026-06-10T03:03:56.435Z"
 }
