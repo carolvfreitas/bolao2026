@@ -441,14 +441,26 @@ function renderPreviewFiltrado(){
   const jogos=jogosDetectados.filter(jd=>(!filtroR||jd.jogo.rodada===filtroR)&&(!filtroD||jd.jogo.data===filtroD));
   let html='';
   jogos.forEach(jd=>{
-    const jogo=jd.jogo,apostas=jogoApostasMap[jogo.id]||[],jaSalvo=state.jogosSalvos.includes(jogo.id);
-    html+=`<div class="jogo-preview-block"${jaSalvo?' style="opacity:.6"':''}><div class="jogo-preview-header"><div style="flex:1">
+    const jogo=jd.jogo,apostas=jogoApostasMap[jogo.id]||[];
+    const jaNoJogo=new Set((state.apostas[jogo.id]||[]).map(a=>a.nome));
+    const novas=apostas.filter(a=>!a.bloqueado&&!jaNoJogo.has(a.nome));
+    const jaSalvas=apostas.filter(a=>!a.bloqueado&&jaNoJogo.has(a.nome));
+    const temSalvos=jaNoJogo.size>0;
+    const badge=novas.length>0?`<span class="jogo-preview-badge">${novas.length} novo(s)</span>`:(temSalvos?`<span class="jogo-preview-badge" style="background:#e6f7ed;color:#007a2e">✅ Sem novidades</span>`:'');
+    html+=`<div class="jogo-preview-block"><div class="jogo-preview-header"><div style="flex:1">
       <div class="jogo-preview-times">${getFlag(jogo.timeA)} ${jogo.timeA} × ${jogo.timeB} ${getFlag(jogo.timeB)}</div>
       <div class="jogo-preview-meta">${fmtData(jogo.data)} · ${jogo.hora} · Grupo ${jogo.grupo} · ${jogo.local} · ${ROD_LABELS[jogo.rodada]||jogo.rodada}</div>
-    </div>${jaSalvo?'<span class="jogo-preview-badge" style="background:#e6f7ed;color:#007a2e">✅ Já salvo</span>':'<span class="jogo-preview-badge">'+apostas.filter(a=>!a.bloqueado).length+' palpite(s)</span>'}</div>`;
-    if(jaSalvo)html+=`<p style="font-size:.8rem;color:var(--texto-sec)">Este jogo já tem apostas salvas e não pode ser alterado.</p>`;
-    else if(!apostas.length)html+=`<p style="font-size:.8rem;color:var(--texto-sec)">Nenhum palpite encontrado para este jogo.</p>`;
-    else{html+=`<div class="apostas-rows">`;apostas.forEach(a=>{if(a.bloqueado)html+=`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-warn">⚠️ ${a.motivo}</span></div>`;else html+=`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span></div>`;});html+=`</div>`;}
+    </div>${badge}</div>`;
+    if(!apostas.length){html+=`<p style="font-size:.8rem;color:var(--texto-sec)">Nenhum palpite encontrado para este jogo.</p>`;}
+    else{
+      html+=`<div class="apostas-rows">`;
+      apostas.forEach(a=>{
+        if(a.bloqueado){html+=`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-warn">⚠️ ${a.motivo}</span></div>`;}
+        else if(jaNoJogo.has(a.nome)){html+=`<div class="aposta-row" style="opacity:.5"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span><span style="font-size:.7rem;color:var(--texto-sec);margin-left:4px">já salvo</span></div>`;}
+        else{html+=`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span><span style="font-size:.7rem;color:var(--verde-dark);font-weight:700;margin-left:4px">novo</span></div>`;}
+      });
+      html+=`</div>`;
+    }
     html+=`</div>`;
   });
   document.getElementById('jogosPreviewList').innerHTML=html||`<div class="empty-state" style="padding:20px"><div class="icon">🔍</div>Nenhum jogo para os filtros selecionados.</div>`;
@@ -458,7 +470,15 @@ function renderPreviewFiltrado(){
 function salvarTudo(){
   if(!pendingPreview)return;
   const {jogosDetectados,jogoApostasMap,podioRows}=pendingPreview;
-  jogosDetectados.forEach(jd=>{const id=jd.jogo.id;if(state.jogosSalvos.includes(id))return;const validas=(jogoApostasMap[id]||[]).filter(a=>!a.bloqueado);if(!validas.length)return;state.apostas[id]=validas.map(a=>({nome:a.nome,gA:a.gA,gB:a.gB}));state.jogosSalvos.push(id);});
+  jogosDetectados.forEach(jd=>{
+    const id=jd.jogo.id;
+    const jaNoJogo=new Set((state.apostas[id]||[]).map(a=>a.nome));
+    const novas=(jogoApostasMap[id]||[]).filter(a=>!a.bloqueado&&!jaNoJogo.has(a.nome));
+    if(!novas.length)return;
+    if(!state.apostas[id])state.apostas[id]=[];
+    state.apostas[id]=[...state.apostas[id],...novas.map(a=>({nome:a.nome,gA:a.gA,gB:a.gB}))];
+    if(!state.jogosSalvos.includes(id))state.jogosSalvos.push(id);
+  });
   if(podioRows.length&&!state.podioBloqueado)state.podio=podioRows;
   pendingPreview=null;saveState();document.getElementById('jogosPreviewWrap').style.display='none';showMsg('jogosMsg','success','✅ Tudo salvo com sucesso!');atualizarRanking();
 }
