@@ -30,6 +30,21 @@
         "nome": "Vinicius Cruzero",
         "gA": 2,
         "gB": 1
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 2,
+        "gB": 1
       }
     ],
     "M2": [
@@ -61,6 +76,21 @@
       {
         "nome": "Vinicius Cruzero",
         "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 1,
         "gB": 0
       }
     ],
@@ -222,6 +252,24 @@
       "campeao": "França",
       "vice": "Espanha",
       "terceiro": "Brasil"
+    },
+    {
+      "nome": "Thiago Games",
+      "campeao": "Brasil",
+      "vice": "Espanha",
+      "terceiro": "França"
+    },
+    {
+      "nome": "Pablo Mazzinghy",
+      "campeao": "França",
+      "vice": "Portugal",
+      "terceiro": "Espanha"
+    },
+    {
+      "nome": "Fernando Barbosa",
+      "campeao": "Inglaterra",
+      "vice": "França",
+      "terceiro": "Espanha"
     }
   ],
   "podioBloqueado": false,
@@ -240,5 +288,5 @@
     "M12"
   ],
   "jogoAtualResultados": null,
-  "_exportedAt": "2026-06-10T13:22:30.440Z"
+  "_exportedAt": "2026-06-10T22:24:52.466Z"
 }
