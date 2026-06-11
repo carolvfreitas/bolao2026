@@ -80,6 +80,11 @@
         "nome": "Guilherme Neri",
         "gA": 2,
         "gB": 0
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 2,
+        "gB": 1
       }
     ],
     "M2": [
@@ -161,6 +166,11 @@
       {
         "nome": "Guilherme Neri",
         "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 2,
         "gB": 0
       }
     ],
@@ -382,6 +392,12 @@
       "campeao": "Portugal",
       "vice": "França",
       "terceiro": "Espanha"
+    },
+    {
+      "nome": "Alice Coelho",
+      "campeao": "Brasil",
+      "vice": "Argentina",
+      "terceiro": "França"
     }
   ],
   "podioBloqueado": false,
@@ -399,6 +415,6 @@
     "M10",
     "M12"
   ],
-  "jogoAtualResultados": null,
-  "_exportedAt": "2026-06-11T01:17:53.520Z"
+  "jogoAtualResultados": "M1",
+  "_exportedAt": "2026-06-11T01:56:02.359Z"
 }
