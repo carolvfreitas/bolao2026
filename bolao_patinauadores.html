@@ -143,8 +143,8 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
       <div class="card-title">📤 Upload de Palpites</div>
       <div class="upload-area" onclick="document.getElementById('csvJogos').click()">
         <div style="font-size:2rem">📂</div>
-        <p><strong>Clique para selecionar o .csv</strong><br>Exportado do Google Forms — um arquivo por dia de jogos</p>
-        <input type="file" id="csvJogos" accept=".csv" onchange="handleCsvJogos(event)">
+        <p><strong>Clique para selecionar os arquivos</strong><br>.csv ou .xlsx — pode selecionar mais de um de uma vez</p>
+        <input type="file" id="csvJogos" accept=".csv,.xlsx,.xls" multiple onchange="handleCsvJogos(event)">
       </div>
       <div id="jogosMsg"></div>
     </div>
@@ -309,7 +309,7 @@ const PARTICIPANTES_VALIDOS=new Set([
   'Alice Coelho','Aloizio Ettinger','Andre Nascimento','Carolina Freitas',
   'Dalila Carvalho','Eduardo Parisi','Eduardo Portugal','Fernando Barbosa',
   'Gabriel Oliveira','Giulia e Rodrigo Thibes','Guilherme Neri','Henrique Santiago',
-  'Leonardo Motta','Marcio Balarini','Marcio Sousa','Marcos Santiago',
+  'Leonardo Tranzillo','Marcio Balarini','Marcio Sousa','Marcos Santiago',
   'Nalditon Leal','Pablo Mazzinghy','Thiago Games','Victor e Marialice Thibes',
   'Vinicius Cruzero'
 ]);
@@ -361,57 +361,133 @@ function switchSubTab(sub,e){
   if(sub==='podio')renderPodioState();
 }
 
+// Converte xlsx/xls para {headers, data} usando SheetJS
+function parseXlsx(arrayBuffer){
+  const wb=XLSX.read(arrayBuffer,{type:'array'});
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+  if(rows.length<2)return{headers:[],data:[]};
+  const headers=rows[0].map(h=>String(h||'').trim());
+  const data=rows.slice(1).filter(r=>r.some(c=>String(c||'').trim()!=='')).map(r=>r.map(c=>String(c||'').trim()));
+  return{headers,data};
+}
+
+function processarDados({headers,data}){
+  // Retorna {jogosDetectados, jogoApostasMap, podioRows, nomeInvalidos, warnings} ou null se inválido
+  if(!headers.length||!data.length)return null;
+  const colTipos=headers.map((h,hi)=>{
+    const hn=norm(h);
+    if(hn.includes('carimbo')||hn.includes('timestamp'))return{tipo:'timestamp'};
+    if(hn.startsWith('nome'))return{tipo:'nome'};
+    if(hn==='campeao'||hn==='campeão')return{tipo:'podio_camp'};
+    if(hn==='vice-campeao'||hn==='vice-campeão'||hn==='vice')return{tipo:'podio_vice'};
+    if(hn==='3o lugar'||hn==='3º lugar'||hn==='terceiro')return{tipo:'podio_terc'};
+    const pais=resolverPais(h);if(pais)return{tipo:'pais',pais};
+    const vals=data.map(r=>r[hi]||'');
+    const todosVaziosOuMC=vals.every(v=>isMCValue(v));
+    if(todosVaziosOuMC&&vals.some(v=>isMCValue(v)&&norm(v)!=''))return{tipo:'mc'};
+    if(hn.includes('grupo')||hn.includes('jogo')||hn.includes('rodada'))return{tipo:'desc'};
+    return{tipo:'ignore'};
+  });
+  const paisIndices=[];colTipos.forEach((ct,i)=>{if(ct.tipo==='pais')paisIndices.push({idx:i,pais:ct.pais});});
+  const jogoPorPar={};JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB).forEach(j=>{jogoPorPar[j.timeA+'|'+j.timeB]=j;jogoPorPar[j.timeB+'|'+j.timeA]=j;});
+  const jogosDetectados=[];let pi=0;
+  while(pi<paisIndices.length-1){const pA=paisIndices[pi].pais,pB=paisIndices[pi+1].pais;const jogo=jogoPorPar[pA+'|'+pB];if(jogo){jogosDetectados.push({jogo,idxA:paisIndices[pi].idx,idxB:paisIndices[pi+1].idx});pi+=2;}else pi++;}
+  if(!jogosDetectados.length)return null;
+  const temPodio=colTipos.some(ct=>ct.tipo==='podio_camp');
+  const idxCamp=colTipos.findIndex(ct=>ct.tipo==='podio_camp');
+  const idxVice=colTipos.findIndex(ct=>ct.tipo==='podio_vice');
+  const idxTerc=colTipos.findIndex(ct=>ct.tipo==='podio_terc');
+  const idxNome=colTipos.findIndex(ct=>ct.tipo==='nome');
+  const warnings=[];const nomeInvalidos=[];const jogoApostasMap={};jogosDetectados.forEach(jd=>{jogoApostasMap[jd.jogo.id]=[];});const podioRows=[];
+  data.forEach(row=>{
+    const nome=(idxNome>=0?row[idxNome]:'').trim();if(!nome)return;
+    if(!PARTICIPANTES_VALIDOS.has(nome)){if(!nomeInvalidos.includes(nome))nomeInvalidos.push(nome);}
+    if(temPodio&&!state.podioBloqueado)podioRows.push({nome,campeao:(idxCamp>=0?row[idxCamp]:'').trim(),vice:(idxVice>=0?row[idxVice]:'').trim(),terceiro:(idxTerc>=0?row[idxTerc]:'').trim()});
+    jogosDetectados.forEach(jd=>{
+      const gA_raw=row[jd.idxA]??'',gB_raw=row[jd.idxB]??'';
+      if(String(gA_raw)===''&&String(gB_raw)==='')return;
+      jogoApostasMap[jd.jogo.id].push({nome,gA:parseInt(gA_raw)||0,gB:parseInt(gB_raw)||0,bloqueado:false,motivo:''});
+    });
+  });
+  return{jogosDetectados,jogoApostasMap,podioRows:temPodio?podioRows:[],nomeInvalidos,warnings};
+}
+
 function handleCsvJogos(event){
-  const file=event.target.files[0];if(!file)return;event.target.value='';
-  const reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      const {headers,data}=parseCsv(e.target.result);
-      if(!headers.length||!data.length){showMsg('jogosMsg','error','❌ Arquivo vazio.');return;}
-      const colTipos=headers.map(h=>{
-        const hn=norm(h);
-        if(hn.includes('carimbo')||hn.includes('timestamp'))return{tipo:'timestamp'};
-        if(hn.startsWith('nome'))return{tipo:'nome'};
-        if(hn==='campeao'||hn==='campeão')return{tipo:'podio_camp'};
-        if(hn==='vice-campeao'||hn==='vice-campeão'||hn==='vice')return{tipo:'podio_vice'};
-        if(hn==='3o lugar'||hn==='3º lugar'||hn==='terceiro')return{tipo:'podio_terc'};
-        const pais=resolverPais(h);if(pais)return{tipo:'pais',pais};
-        const vals=data.map(r=>r[headers.indexOf(h)]||'');
-        const todosVaziosOuMC=vals.every(v=>isMCValue(v));
-        if(todosVaziosOuMC&&vals.some(v=>isMCValue(v)&&norm(v)!=''))return{tipo:'mc'};
-        if(hn.includes('grupo')||hn.includes('jogo')||hn.includes('rodada'))return{tipo:'desc'};
-        return{tipo:'ignore'};
-      });
-      const paisIndices=[];colTipos.forEach((ct,i)=>{if(ct.tipo==='pais')paisIndices.push({idx:i,pais:ct.pais});});
-      const jogoPorPar={};JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB).forEach(j=>{jogoPorPar[j.timeA+'|'+j.timeB]=j;jogoPorPar[j.timeB+'|'+j.timeA]=j;});
-      const jogosDetectados=[];let pi=0;
-      while(pi<paisIndices.length-1){const pA=paisIndices[pi].pais,pB=paisIndices[pi+1].pais;const jogo=jogoPorPar[pA+'|'+pB];if(jogo){jogosDetectados.push({jogo,idxA:paisIndices[pi].idx,idxB:paisIndices[pi+1].idx});pi+=2;}else pi++;}
-      if(!jogosDetectados.length){showMsg('jogosMsg','error','❌ Nenhum par de países corresponde a um jogo cadastrado.');return;}
-      const temPodio=colTipos.some(ct=>ct.tipo==='podio_camp');
-      const idxCamp=colTipos.findIndex(ct=>ct.tipo==='podio_camp');
-      const idxVice=colTipos.findIndex(ct=>ct.tipo==='podio_vice');
-      const idxTerc=colTipos.findIndex(ct=>ct.tipo==='podio_terc');
-      const idxNome=colTipos.findIndex(ct=>ct.tipo==='nome');
-      const idxTS=colTipos.findIndex(ct=>ct.tipo==='timestamp');
-      const warnings=[];const nomeInvalidos=[];const jogoApostasMap={};jogosDetectados.forEach(jd=>{jogoApostasMap[jd.jogo.id]=[];});const podioRows=[];
-      data.forEach(row=>{
-        const nome=(idxNome>=0?row[idxNome]:'').trim();if(!nome)return;
-        if(!PARTICIPANTES_VALIDOS.has(nome)){if(!nomeInvalidos.includes(nome))nomeInvalidos.push(nome);}
-        if(temPodio&&!state.podioBloqueado)podioRows.push({nome,campeao:(idxCamp>=0?row[idxCamp]:'').trim(),vice:(idxVice>=0?row[idxVice]:'').trim(),terceiro:(idxTerc>=0?row[idxTerc]:'').trim()});
-        jogosDetectados.forEach(jd=>{
-          const gA_raw=row[jd.idxA]??'',gB_raw=row[jd.idxB]??'';
-          if(gA_raw===''&&gB_raw==='')return;
-          jogoApostasMap[jd.jogo.id].push({nome,gA:parseInt(gA_raw)||0,gB:parseInt(gB_raw)||0,bloqueado:false,motivo:''});
-        });
-      });
-      if(nomeInvalidos.length){
-        showMsg('jogosMsg','error','⚠️ Verifique o arquivo — os seguintes nomes não constam na lista de participantes:<br><strong>'+nomeInvalidos.join(', ')+'</strong><br><br>Corrija o arquivo e faça o upload novamente.');return;
+  const files=Array.from(event.target.files||[]);
+  if(!files.length)return;
+  event.target.value='';
+  showMsg('jogosMsg','warn','⏳ Processando '+files.length+' arquivo(s)...');
+
+  const resultados=[];
+  let concluidos=0;
+
+  files.forEach(file=>{
+    const isXlsx=file.name.match(/\.xlsx?$/i);
+    const reader=new FileReader();
+    reader.onload=function(e){
+      try{
+        let parsed;
+        if(isXlsx){
+          parsed=parseXlsx(e.target.result);
+        }else{
+          parsed=parseCsv(e.target.result);
+        }
+        const resultado=processarDados(parsed);
+        resultados.push({nome:file.name,resultado});
+      }catch(err){
+        resultados.push({nome:file.name,resultado:null,erro:err.message});
       }
-      pendingPreview={jogosDetectados,jogoApostasMap,podioRows:temPodio?podioRows:[],warnings};
-      renderPreview();
-    }catch(err){showMsg('jogosMsg','error','❌ Erro ao processar CSV: '+err.message);}
-  };
-  reader.readAsText(file,'UTF-8');
+      concluidos++;
+      if(concluidos===files.length) finalizarUpload(resultados);
+    };
+    if(isXlsx) reader.readAsArrayBuffer(file);
+    else reader.readAsText(file,'UTF-8');
+  });
+}
+
+function finalizarUpload(resultados){
+  // Verifica erros e nomes inválidos primeiro
+  const erros=resultados.filter(r=>!r.resultado||r.erro);
+  const nomesInvalidosTodos=[];
+  resultados.forEach(r=>{if(r.resultado?.nomeInvalidos?.length)nomesInvalidosTodos.push(...r.resultado.nomeInvalidos.map(n=>n+' ('+r.nome+')'));});
+
+  if(erros.length){
+    const msgs=erros.map(r=>r.erro?`❌ ${r.nome}: ${r.erro}`:`❌ ${r.nome}: nenhum jogo reconhecido`);
+    showMsg('jogosMsg','error',msgs.join('<br>'));
+    if(erros.length===resultados.length)return;
+  }
+  if(nomesInvalidosTodos.length){
+    showMsg('jogosMsg','error','⚠️ Verifique os arquivos — nomes não constam na lista de participantes:<br><strong>'+nomesInvalidosTodos.join(', ')+'</strong><br><br>Corrija e faça o upload novamente.');return;
+  }
+
+  // Mescla todos os resultados válidos
+  const validos=resultados.filter(r=>r.resultado&&!r.erro);
+  const jogosDetectadosMerged=[];
+  const jogoApostasMapMerged={};
+  const podioRowsMerged=[];
+  const warningsMerged=[];
+  const jogosVistos=new Set();
+
+  validos.forEach(({resultado})=>{
+    resultado.jogosDetectados.forEach(jd=>{
+      if(!jogosVistos.has(jd.jogo.id)){jogosVistos.add(jd.jogo.id);jogosDetectadosMerged.push(jd);}
+      if(!jogoApostasMapMerged[jd.jogo.id])jogoApostasMapMerged[jd.jogo.id]=[];
+      // Adiciona só quem ainda não está no mapa (evita duplicados entre arquivos)
+      const nomesJaNoMerge=new Set(jogoApostasMapMerged[jd.jogo.id].map(a=>a.nome));
+      resultado.jogoApostasMap[jd.jogo.id]?.forEach(a=>{if(!nomesJaNoMerge.has(a.nome))jogoApostasMapMerged[jd.jogo.id].push(a);});
+    });
+    // Pódio: mesma lógica
+    const nomesPodioDados=new Set(podioRowsMerged.map(p=>p.nome));
+    resultado.podioRows.forEach(p=>{if(!nomesPodioDados.has(p.nome))podioRowsMerged.push(p);});
+    warningsMerged.push(...resultado.warnings);
+  });
+
+  pendingPreview={jogosDetectados:jogosDetectadosMerged,jogoApostasMap:jogoApostasMapMerged,podioRows:podioRowsMerged,warnings:warningsMerged};
+  const msg=validos.length>1?`✅ ${validos.length} arquivos processados e mesclados.`:'';
+  if(msg)showMsg('jogosMsg','success',msg);
+  else document.getElementById('jogosMsg').innerHTML='';
+  renderPreview();
 }
 
 function renderPreview(){
