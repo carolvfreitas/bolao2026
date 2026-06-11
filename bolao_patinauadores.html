@@ -379,6 +379,11 @@ const MC_KEYWORDS=['vence','empate','clear','ganha','wins','draw'];
 function isMCValue(val){const n=norm(val||'');return n===''||MC_KEYWORDS.some(k=>n.includes(k));}
 
 function fmtData(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}`;}
+function isMadrugada(hora){return hora==='00:00'||hora==='01:00';}
+function horaTag(hora){
+  if(!hora)return'—';
+  return isMadrugada(hora)?`${hora} <span title="Madrugada no Brasil" style="font-size:.85rem;cursor:help">🌙</span>`:hora;
+}
 
 function parseCsv(text){
   const rows=[];let col='',cols=[],inQ=false;
@@ -591,7 +596,7 @@ function renderPreviewFiltrado(){
     const badge=novas.length>0?`<span class="jogo-preview-badge">${novas.length} novo(s)</span>`:(temSalvos?`<span class="jogo-preview-badge" style="background:#e6f7ed;color:#007a2e">✅ Sem novidades</span>`:'');
     html+=`<div class="jogo-preview-block"><div class="jogo-preview-header"><div style="flex:1">
       <div class="jogo-preview-times">${getFlag(jogo.timeA)} ${jogo.timeA} × ${jogo.timeB} ${getFlag(jogo.timeB)}</div>
-      <div class="jogo-preview-meta">${fmtData(jogo.data)} · ${jogo.hora} · Grupo ${jogo.grupo} · ${jogo.local} · ${ROD_LABELS[jogo.rodada]||jogo.rodada}</div>
+      <div class="jogo-preview-meta">${fmtData(jogo.data)} · ${horaTag(jogo.hora)} · Grupo ${jogo.grupo} · ${jogo.local} · ${ROD_LABELS[jogo.rodada]||jogo.rodada}</div>
     </div>${badge}</div>`;
     if(!apostas.length){html+=`<p style="font-size:.8rem;color:var(--texto-sec)">Nenhum palpite encontrado para este jogo.</p>`;}
     else{
@@ -654,7 +659,7 @@ function renderJogosListRes(jogos,year,month){
     const resBadge=state.resultados[j.id]!==undefined?`<span style="color:var(--verde-dark);font-weight:800;font-size:.75rem;margin-left:auto">✅ ${state.resultados[j.id].gA}×${state.resultados[j.id].gB}</span>`:'';
     const tLabel=j.mm?(j.timeA&&j.timeB?`${getFlagNome(j.timeA)} × ${getFlagNome(j.timeB)}`:`Jogo ${j.id}`):`${getFlagNome(j.timeA)} × ${getFlagNome(j.timeB)}`;
     return`<div class="jogo-item${isSel?' selected':''}" onclick="selecionarJogoResultado('${j.id}','${year||2026}','${month||6}')">
-      <div class="jogo-hora-data"><span class="jogo-hora">${j.hora||'—'}</span><span class="jogo-data-tag">${fmtData(j.data)}</span></div>
+      <div class="jogo-hora-data"><span class="jogo-hora">${horaTag(j.hora)}</span><span class="jogo-data-tag">${fmtData(j.data)}</span></div>
       <div class="jogo-info"><div class="jogo-times">${tLabel}</div><div class="jogo-grupo-local">${j.grupo?'Grupo '+j.grupo+' · ':''}${j.local}</div></div>
       ${resBadge}
     </div>`;
@@ -814,7 +819,7 @@ function renderGerenciar(){
     if(!apostas.length)return;
     html+=`<div class="ger-jogo-block">
       <div class="ger-jogo-header">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</div>
-      <div class="ger-jogo-meta">${fmtData(j.data)} · ${j.hora} · Grupo ${j.grupo||'—'} · ${ROD_LABELS[j.rodada]||j.rodada}</div>`;
+      <div class="ger-jogo-meta">${fmtData(j.data)} · ${horaTag(j.hora)} · Grupo ${j.grupo||'—'} · ${ROD_LABELS[j.rodada]||j.rodada}</div>`;
     apostas.forEach(a=>{
       html+=`<div class="ger-aposta-row">
         <span class="ger-aposta-nome">${a.nome}</span>

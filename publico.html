@@ -122,7 +122,10 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
   <!-- Jogos -->
   <div id="subpanel-jogos-pub">
     <div class="card">
-      <div class="card-title">🎯 Palpites por jogo <span class="readonly-badge">👁 somente leitura</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div class="card-title" style="margin:0">🎯 Palpites <span class="readonly-badge">👁 somente leitura</span></div>
+        <button id="toggleViewBtn" onclick="toggleViewMode()" style="padding:6px 14px;border:1.5px solid var(--azul);background:var(--branco);color:var(--azul);border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer">👤 Ver por pessoa</button>
+      </div>
       <div class="filter-bar">
         <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Participante:</label>
         <select class="filter-select" id="filtroParticipante" onchange="renderApostasPublico()">
@@ -229,6 +232,11 @@ let DADOS=null;
 
 function getFlag(n){if(!n)return'';const p=PAISES.find(x=>x.nome===n);return p?p.flag:'🏳️';}
 function fmtData(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}`;}
+function isMadrugada(hora){return hora==='00:00'||hora==='01:00';}
+function horaTag(hora){
+  if(!hora)return'—';
+  return isMadrugada(hora)?`${hora} <span title="Madrugada no Brasil" style="font-size:.85rem;cursor:help">🌙</span>`:hora;
+}
 function renderPaisCell(n){if(!n||n.trim()==='')return'<span style="color:#aaa;font-size:.8rem">Não informado</span>';return`<div class="pais-cell"><span style="font-size:1.2rem">${getFlag(n)}</span><span>${n}</span></div>`;}
 
 function switchTab(tab,e){
@@ -253,8 +261,9 @@ function atualizarFooter(exportedAt){
 }
 
 // APOSTAS PÚBLICAS
+let _viewMode='jogo'; // 'jogo' ou 'pessoa'
+
 function onFiltroRodadaChange(){
-  // Atualiza opções de dia com base na rodada selecionada
   const rodada=document.getElementById('filtroRodada').value;
   const apostas=DADOS?.apostas||{};
   const diasSet=new Set();
@@ -266,6 +275,13 @@ function onFiltroRodadaChange(){
   renderApostasPublico();
 }
 
+function toggleViewMode(){
+  _viewMode=_viewMode==='jogo'?'pessoa':'jogo';
+  const btn=document.getElementById('toggleViewBtn');
+  btn.textContent=_viewMode==='jogo'?'👤 Ver por pessoa':'⚽ Ver por jogo';
+  renderApostasPublico();
+}
+
 function renderApostasPublico(){
   if(!DADOS)return;
   const apostas=DADOS.apostas||{};
@@ -274,28 +290,60 @@ function renderApostasPublico(){
   const filtroD=document.getElementById('filtroDia').value;
   const list=document.getElementById('apostasPublicoList');
 
-  const jogosComApostas=JOGOS.filter(j=>
-    apostas[j.id]&&apostas[j.id].length>0&&
-    (!filtroR||j.rodada===filtroR)&&
-    (!filtroD||j.data===filtroD)
-  ).sort((a,b)=>{const da=a.data+a.hora,db=b.data+b.hora;return da.localeCompare(db);});
-
-  if(!jogosComApostas.length){list.innerHTML=`<div class="empty-state"><div class="icon">⚽</div>Nenhum palpite encontrado para os filtros selecionados.</div>`;return;}
-
-  let html='';
-  jogosComApostas.forEach(j=>{
-    let apostasJogo=apostas[j.id]||[];
-    if(filtroP)apostasJogo=apostasJogo.filter(a=>a.nome===filtroP);
-    if(!apostasJogo.length)return;
-    html+=`<div class="jogo-preview-block">
-      <div class="jogo-preview-header">
-        <div class="jogo-preview-times">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</div>
-        <div class="jogo-preview-meta">${fmtData(j.data)} · ${j.hora} · Grupo ${j.grupo} · ${j.local} · ${ROD_LABELS[j.rodada]||j.rodada}</div>
-      </div>
-      <div class="apostas-rows">${apostasJogo.map(a=>`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span></div>`).join('')}</div>
-    </div>`;
-  });
-  list.innerHTML=html||`<div class="empty-state"><div class="icon">🔍</div>Nenhum palpite encontrado para os filtros selecionados.</div>`;
+  if(_viewMode==='jogo'){
+    const jogosComApostas=JOGOS.filter(j=>
+      apostas[j.id]&&apostas[j.id].length>0&&
+      (!filtroR||j.rodada===filtroR)&&
+      (!filtroD||j.data===filtroD)
+    ).sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+    if(!jogosComApostas.length){list.innerHTML=`<div class="empty-state"><div class="icon">⚽</div>Nenhum palpite encontrado para os filtros selecionados.</div>`;return;}
+    let html='';
+    jogosComApostas.forEach(j=>{
+      let apostasJogo=apostas[j.id]||[];
+      if(filtroP)apostasJogo=apostasJogo.filter(a=>a.nome===filtroP);
+      if(!apostasJogo.length)return;
+      html+=`<div class="jogo-preview-block">
+        <div class="jogo-preview-header">
+          <div class="jogo-preview-times">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</div>
+          <div class="jogo-preview-meta">${fmtData(j.data)} · ${horaTag(j.hora)} · Grupo ${j.grupo} · ${j.local} · ${ROD_LABELS[j.rodada]||j.rodada}</div>
+        </div>
+        <div class="apostas-rows">${apostasJogo.map(a=>`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span></div>`).join('')}</div>
+      </div>`;
+    });
+    list.innerHTML=html||`<div class="empty-state"><div class="icon">🔍</div>Nenhum palpite encontrado para os filtros selecionados.</div>`;
+  } else {
+    // Vista por pessoa
+    const nomes=filtroP?[filtroP]:[...new Set(Object.values(apostas).flatMap(aps=>aps.map(a=>a.nome)))].sort();
+    const jogosBase=JOGOS.filter(j=>
+      apostas[j.id]&&apostas[j.id].length>0&&
+      (!filtroR||j.rodada===filtroR)&&
+      (!filtroD||j.data===filtroD)
+    ).sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+    if(!nomes.length||!jogosBase.length){list.innerHTML=`<div class="empty-state"><div class="icon">🔍</div>Nenhum palpite encontrado para os filtros selecionados.</div>`;return;}
+    let html='';
+    nomes.forEach(nome=>{
+      const jogosNome=jogosBase.filter(j=>apostas[j.id]?.some(a=>a.nome===nome));
+      if(!jogosNome.length)return;
+      html+=`<div class="jogo-preview-block">
+        <div class="jogo-preview-header">
+          <div class="jogo-preview-times" style="font-size:1rem">👤 ${nome}</div>
+        </div>
+        <div class="apostas-rows">`;
+      jogosNome.forEach(j=>{
+        const ap=apostas[j.id].find(a=>a.nome===nome);
+        if(!ap)return;
+        html+=`<div class="aposta-row">
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:.88rem">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</div>
+            <div style="font-size:.72rem;color:var(--texto-sec);margin-top:2px">${fmtData(j.data)} · ${horaTag(j.hora)} · Grupo ${j.grupo}</div>
+          </div>
+          <span class="aposta-placar">${ap.gA} × ${ap.gB}</span>
+        </div>`;
+      });
+      html+=`</div></div>`;
+    });
+    list.innerHTML=html||`<div class="empty-state"><div class="icon">🔍</div>Nenhum palpite encontrado.</div>`;
+  }
 }
 
 function popularFiltroParticipante(){
@@ -315,8 +363,7 @@ function renderPodio(){
 
 function toggleRodada(el){
   el.classList.toggle('collapsed');
-  const jogos=el.nextElementSibling;
-  jogos.classList.toggle('collapsed');
+  el.nextElementSibling.classList.toggle('collapsed');
 }
 
 function renderResultados(){
@@ -325,29 +372,42 @@ function renderResultados(){
   const jogosSalvos=DADOS.jogosSalvos||[];
   const resultados=DADOS.resultados||{};
   const jogosRel=JOGOS.filter(j=>jogosSalvos.includes(j.id)||resultados[j.id]!==undefined)
-    .sort((a,b)=>{const da=a.data+a.hora,db=b.data+b.hora;return da.localeCompare(db);});
+    .sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
   if(!jogosRel.length){wrap.innerHTML=`<div class="empty-state"><div class="icon">⚽</div>Nenhum resultado registrado ainda.</div>`;return;}
   const porRodada={};
   jogosRel.forEach(j=>{if(!porRodada[j.rodada])porRodada[j.rodada]=[];porRodada[j.rodada].push(j);});
   const ordem=['1','2','3','16avos','oitavas','quartas','semis','terceiro','final'];
+
+  // Descobre primeira rodada incompleta (rodada ativa)
+  let primeiraAtiva=null;
+  for(const r of ordem){
+    if(!porRodada[r])continue;
+    const total=porRodada[r].length;
+    const comRes=porRodada[r].filter(j=>resultados[j.id]!==undefined).length;
+    if(comRes<total){primeiraAtiva=r;break;}
+  }
+
   let html='';
   ordem.forEach(r=>{
     if(!porRodada[r])return;
     const total=porRodada[r].length;
     const comRes=porRodada[r].filter(j=>resultados[j.id]!==undefined).length;
-    const badge=comRes===total
+    const completa=comRes===total;
+    // Colapsa automaticamente se completa e não é a rodada ativa
+    const colapsada=completa&&r!==primeiraAtiva;
+    const badge=completa
       ?`<span style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px;letter-spacing:0">✅ ${total} jogos</span>`
       :`<span style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px;letter-spacing:0">${comRes}/${total}</span>`;
-    html+=`<div class="rodada-header-label" onclick="toggleRodada(this)">
+    html+=`<div class="rodada-header-label${colapsada?' collapsed':''}" onclick="toggleRodada(this)">
       <span>${ROD_LABELS[r]||r} ${badge}</span>
       <span class="rodada-arrow">▼</span>
     </div>`;
-    html+=`<div class="rodada-jogos">`;
+    html+=`<div class="rodada-jogos${colapsada?' collapsed':''}">`;
     porRodada[r].forEach(j=>{
       const res=resultados[j.id];
       const placar=res?`<span class="jogo-placar">${res.gA} — ${res.gB}</span>`:`<span class="jogo-placar pendente">A jogar</span>`;
       html+=`<div class="jogo-row">
-        <div class="jogo-hora-data"><span class="jogo-hora">${j.hora||'—'}</span><span class="jogo-data-tag">${fmtData(j.data)}</span></div>
+        <div class="jogo-hora-data"><span class="jogo-hora">${horaTag(j.hora)}</span><span class="jogo-data-tag">${fmtData(j.data)}</span></div>
         <div class="jogo-info"><div class="jogo-times">${getFlag(j.timeA)} ${j.timeA||'?'} × ${j.timeB||'?'} ${getFlag(j.timeB)}</div><div class="jogo-grupo-local">${j.grupo?'Grupo '+j.grupo+' · ':''}${j.local}</div></div>
         ${placar}
       </div>`;
