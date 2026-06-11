@@ -397,12 +397,10 @@ function handleCsvJogos(event){
       data.forEach(row=>{
         const nome=(idxNome>=0?row[idxNome]:'').trim();if(!nome)return;
         if(!PARTICIPANTES_VALIDOS.has(nome)){if(!nomeInvalidos.includes(nome))nomeInvalidos.push(nome);}
-        const dataEnvio=tsBRT(idxTS>=0?row[idxTS]:'');
         if(temPodio&&!state.podioBloqueado)podioRows.push({nome,campeao:(idxCamp>=0?row[idxCamp]:'').trim(),vice:(idxVice>=0?row[idxVice]:'').trim(),terceiro:(idxTerc>=0?row[idxTerc]:'').trim()});
         jogosDetectados.forEach(jd=>{
           const gA_raw=row[jd.idxA]??'',gB_raw=row[jd.idxB]??'';
           if(gA_raw===''&&gB_raw==='')return;
-          if(dataEnvio&&dataEnvio>=jd.jogo.data){warnings.push(`${nome}: palpite para ${jd.jogo.timeA} × ${jd.jogo.timeB} enviado no dia do jogo ou depois — descartado.`);jogoApostasMap[jd.jogo.id].push({nome,gA:parseInt(gA_raw)||0,gB:parseInt(gB_raw)||0,bloqueado:true,motivo:'Enviado no dia do jogo ou depois'});return;}
           jogoApostasMap[jd.jogo.id].push({nome,gA:parseInt(gA_raw)||0,gB:parseInt(gB_raw)||0,bloqueado:false,motivo:''});
         });
       });
