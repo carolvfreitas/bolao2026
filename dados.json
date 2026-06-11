@@ -1549,7 +1549,12 @@
       }
     ]
   },
-  "resultados": {},
+  "resultados": {
+    "M1": {
+      "gA": 2,
+      "gB": 0
+    }
+  },
   "podio": [
     {
       "nome": "Marcio Balarini",
@@ -1672,7 +1677,7 @@
       "terceiro": "Alemanha"
     }
   ],
-  "podioBloqueado": false,
+  "podioBloqueado": true,
   "jogosSalvos": [
     "M1",
     "M2",
@@ -1699,6 +1704,6 @@
     "M23",
     "M24"
   ],
-  "jogoAtualResultados": "M47",
-  "_exportedAt": "2026-06-11T15:38:53.476Z"
+  "jogoAtualResultados": "M1",
+  "_exportedAt": "2026-06-11T21:05:15.333Z"
 }
