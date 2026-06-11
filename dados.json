@@ -95,6 +95,11 @@
         "nome": "Leonardo Tranzillo",
         "gA": 2,
         "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 0,
+        "gB": 1
       }
     ],
     "M2": [
@@ -192,6 +197,11 @@
         "nome": "Leonardo Tranzillo",
         "gA": 1,
         "gB": 2
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 3,
+        "gB": 1
       }
     ],
     "M3": [
@@ -1654,6 +1664,12 @@
       "campeao": "Portugal",
       "vice": "França",
       "terceiro": "Brasil"
+    },
+    {
+      "nome": "Aloizio Ettinger",
+      "campeao": "Brasil",
+      "vice": "Argentina",
+      "terceiro": "Alemanha"
     }
   ],
   "podioBloqueado": false,
@@ -1684,5 +1700,5 @@
     "M24"
   ],
   "jogoAtualResultados": "M47",
-  "_exportedAt": "2026-06-11T13:41:35.504Z"
+  "_exportedAt": "2026-06-11T15:38:53.476Z"
 }
