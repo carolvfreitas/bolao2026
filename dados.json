@@ -90,6 +90,11 @@
         "nome": "Nalditon Leal",
         "gA": 0,
         "gB": 1
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 2,
+        "gB": 0
       }
     ],
     "M2": [
@@ -180,6 +185,11 @@
       },
       {
         "nome": "Nalditon Leal",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Leonardo Tranzillo",
         "gA": 1,
         "gB": 2
       }
@@ -414,6 +424,12 @@
       "campeao": "Brasil",
       "vice": "Espanha",
       "terceiro": "França"
+    },
+    {
+      "nome": "Leonardo Tranzillo",
+      "campeao": "Portugal",
+      "vice": "França",
+      "terceiro": "Brasil"
     }
   ],
   "podioBloqueado": false,
@@ -432,5 +448,5 @@
     "M12"
   ],
   "jogoAtualResultados": "M1",
-  "_exportedAt": "2026-06-11T03:33:18.540Z"
+  "_exportedAt": "2026-06-11T13:05:30.280Z"
 }
