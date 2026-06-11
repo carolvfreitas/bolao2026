@@ -204,6 +204,76 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 1,
         "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 3,
+        "gB": 2
       }
     ],
     "M4": [
@@ -216,6 +286,76 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 0,
         "gB": 2
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 1,
+        "gB": 3
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 2,
+        "gB": 0
       }
     ],
     "M6": [
@@ -228,6 +368,61 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 0,
         "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 3
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 1,
+        "gB": 4
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 3,
+        "gB": 4
       }
     ],
     "M7": [
@@ -239,6 +434,61 @@
       {
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 4,
+        "gB": 1
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 3,
         "gB": 1
       }
     ],
@@ -252,6 +502,61 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 0,
         "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 0,
+        "gB": 4
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 1,
+        "gB": 1
       }
     ],
     "M5": [
@@ -264,6 +569,61 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 1,
         "gB": 2
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 3
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 0,
+        "gB": 3
       }
     ],
     "M9": [
@@ -276,6 +636,61 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 5,
         "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 6,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 5,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 4,
+        "gB": 1
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 9,
+        "gB": 0
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 3,
+        "gB": 0
       }
     ],
     "M11": [
@@ -288,6 +703,61 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 1,
         "gB": 0
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 3,
+        "gB": 2
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 2,
+        "gB": 2
       }
     ],
     "M10": [
@@ -300,6 +770,61 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 1,
         "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 3
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 1,
+        "gB": 2
       }
     ],
     "M12": [
@@ -312,6 +837,705 @@
         "nome": "Giulia e Rodrigo Thibes",
         "gA": 0,
         "gB": 0
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Alice Coelho",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 2,
+        "gB": 0
+      }
+    ],
+    "M13": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 5,
+        "gB": 0
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 5,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 5,
+        "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 3,
+        "gB": 0
+      }
+    ],
+    "M15": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 1,
+        "gB": 3
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 1,
+        "gB": 4
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 0,
+        "gB": 2
+      }
+    ],
+    "M14": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 3,
+        "gB": 2
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 1
+      }
+    ],
+    "M16": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 1,
+        "gB": 0
+      }
+    ],
+    "M20": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 1,
+        "gB": 0
+      }
+    ],
+    "M18": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 1
+      }
+    ],
+    "M19": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 0,
+        "gB": 4
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 1,
+        "gB": 2
+      }
+    ],
+    "M17": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 0
+      }
+    ],
+    "M21": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 5,
+        "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 4,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 3,
+        "gB": 1
+      }
+    ],
+    "M22": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 1
+      }
+    ],
+    "M23": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 3,
+        "gB": 3
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 1,
+        "gB": 0
+      }
+    ],
+    "M24": [
+      {
+        "nome": "Eduardo Parisi",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Giulia e Rodrigo Thibes",
+        "gA": 1,
+        "gB": 3
+      },
+      {
+        "nome": "Gabriel Oliveira",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Vinicius Cruzero",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 1,
+        "gB": 3
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Leonardo Tranzillo",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 0,
+        "gB": 1
       }
     ]
   },
@@ -445,8 +1669,20 @@
     "M9",
     "M11",
     "M10",
-    "M12"
+    "M12",
+    "M13",
+    "M15",
+    "M14",
+    "M16",
+    "M20",
+    "M18",
+    "M19",
+    "M17",
+    "M21",
+    "M22",
+    "M23",
+    "M24"
   ],
-  "jogoAtualResultados": "M1",
-  "_exportedAt": "2026-06-11T13:05:30.280Z"
+  "jogoAtualResultados": "M47",
+  "_exportedAt": "2026-06-11T13:41:35.504Z"
 }
