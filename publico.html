@@ -369,7 +369,8 @@ function renderRanking(){
     <td style="text-align:center;font-weight:700;color:var(--verde-dark)">${dados.exatos}</td>
   </tr>`).join('')}</tbody></table>`;
   const exportRows=[];
-  ranking.forEach(([nome,dados])=>dados.detalhes.forEach(d=>exportRows.push({Participante:nome,Rodada:ROD_LABELS[d.rodada]||d.rodada||'',Data:fmtData(d.data),Jogo:d.jogo,Palpite:d.placar,Resultado:d.resultado||'Pendente',Pontos:d.pts,Status:d.status})));
+  ranking.forEach(([nome,dados])=>dados.detalhes.forEach(d=>{const jogo=JOGOS.find(j=>j.timeA+' × '+j.timeB===d.jogo||j.timeB+' × '+j.timeA===d.jogo);exportRows.push({Participante:nome,Rodada:ROD_LABELS[d.rodada]||d.rodada||'',Data:fmtData(d.data),_data:d.data||'',_hora:jogo?.hora||'',_jogo:d.jogo||'',Jogo:d.jogo,Palpite:d.placar,Resultado:d.resultado||'Pendente',Pontos:d.pts,Status:d.status});}));
+  exportRows.sort((a,b)=>a.Participante.localeCompare(b.Participante,'pt-BR')||a._data.localeCompare(b._data)||a._hora.localeCompare(b._hora)||a._jogo.localeCompare(b._jogo,'pt-BR'));
   window._exportRowsAllPub=exportRows;
   const sel=document.getElementById('exportFiltroPub');
   if(sel){const nomes=[...new Set(exportRows.map(r=>r.Participante))].sort();sel.innerHTML='<option value="">Todos os participantes</option>'+nomes.map(n=>`<option value="${n}">${n}</option>`).join('');}
