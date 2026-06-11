@@ -108,6 +108,32 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
 .podio-bloqueado-overlay{background:var(--cinza-bg);border-radius:10px;padding:20px;text-align:center;border:1px solid var(--cinza-borda)}
 .empty-state{text-align:center;padding:30px;color:var(--texto-sec);font-size:.9rem}
 .empty-state .icon{font-size:2.5rem;margin-bottom:8px}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:14px;padding:24px;width:90%;max-width:380px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.modal-title{font-weight:800;font-size:1rem;color:var(--azul);margin-bottom:16px}
+.modal-field{margin-bottom:14px}
+.modal-field label{font-size:.8rem;font-weight:700;color:var(--texto-sec);display:block;margin-bottom:5px}
+.modal-field input{width:100%;padding:9px 12px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;text-align:center}
+.modal-field input:focus{outline:none;border-color:var(--verde)}
+.modal-actions{display:flex;gap:8px;margin-top:18px}
+.modal-actions .btn{flex:1}
+.btn-danger{background:#e74c3c;color:#fff}.btn-danger:hover{background:#c0392b}
+.btn-cinza{background:var(--cinza-borda);color:var(--texto)}.btn-cinza:hover{background:#c8d0df}
+
+/* GERENCIAR */
+.ger-jogo-block{background:var(--cinza-bg);border-radius:10px;border:1px solid var(--cinza-borda);padding:14px;margin-bottom:10px}
+.ger-jogo-header{font-weight:800;font-size:.95rem;color:var(--azul);margin-bottom:4px}
+.ger-jogo-meta{font-size:.75rem;color:var(--texto-sec);font-weight:600;margin-bottom:10px}
+.ger-aposta-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--branco);border-radius:8px;border:1px solid var(--cinza-borda);margin-bottom:6px}
+.ger-aposta-nome{font-weight:700;flex:1;font-size:.88rem}
+.ger-aposta-placar{font-weight:800;color:var(--verde-dark);font-size:.9rem;margin-right:4px}
+.ger-btn-edit{padding:4px 10px;border:none;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer;background:var(--azul-light);color:var(--azul);transition:all .15s}
+.ger-btn-edit:hover{background:var(--azul);color:#fff}
+.ger-btn-del{padding:4px 10px;border:none;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer;background:#fde8e8;color:#c0392b;transition:all .15s}
+.ger-btn-del:hover{background:#e74c3c;color:#fff}
 .export-table{width:100%;border-collapse:collapse;font-size:.82rem}
 .export-table th{background:var(--azul);color:#fff;padding:8px 10px;text-align:left;font-weight:700;font-size:.78rem;white-space:nowrap}
 .export-table td{padding:7px 10px;border-bottom:1px solid var(--cinza-borda);white-space:nowrap}
@@ -136,6 +162,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
 <div id="panel-apostas" class="tab-panel active">
   <div class="subtabs">
     <button class="subtab active" onclick="switchSubTab('jogos',event)">⚽ Jogos</button>
+    <button class="subtab" onclick="switchSubTab('gerenciar',event)">✏️ Gerenciar</button>
     <button class="subtab" onclick="switchSubTab('podio',event)">🏆 Pódio</button>
   </div>
   <div id="subpanel-jogos">
@@ -180,6 +207,32 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
       </div>
     </div>
   </div>
+  <div id="subpanel-gerenciar" style="display:none">
+    <div class="card">
+      <div class="card-title">✏️ Gerenciar Apostas Salvas</div>
+      <div class="filter-bar" style="margin-bottom:14px">
+        <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Rodada:</label>
+        <select class="filter-select" id="gerFiltroRodada" onchange="onGerFiltroRodadaChange()" style="padding:6px 10px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;color:var(--texto);background:#fff;cursor:pointer">
+          <option value="">Todas</option>
+          <option value="1">1ª Rodada</option><option value="2">2ª Rodada</option>
+          <option value="3">3ª Rodada</option><option value="16avos">16 avos de final</option>
+          <option value="oitavas">Oitavas de final</option><option value="quartas">Quartas de final</option>
+          <option value="semis">Semifinais</option><option value="terceiro">3º lugar</option>
+          <option value="final">Final</option>
+        </select>
+        <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Dia:</label>
+        <select class="filter-select" id="gerFiltroDia" onchange="renderGerenciar()" style="padding:6px 10px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;color:var(--texto);background:#fff;cursor:pointer">
+          <option value="">Todos</option>
+        </select>
+        <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Participante:</label>
+        <select class="filter-select" id="gerFiltroNome" onchange="renderGerenciar()" style="padding:6px 10px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;color:var(--texto);background:#fff;cursor:pointer">
+          <option value="">Todos</option>
+        </select>
+      </div>
+      <div id="gerenciarList"><div class="empty-state"><div class="icon">✏️</div>Nenhuma aposta salva ainda.</div></div>
+    </div>
+  </div>
+
   <div id="subpanel-podio" style="display:none">
     <div class="card">
       <div class="card-title">🏆 Palpites do Pódio</div>
@@ -357,8 +410,10 @@ function switchSubTab(sub,e){
   document.querySelectorAll('#panel-apostas .subtab').forEach(t=>t.classList.remove('active'));
   if(e&&e.target)e.target.classList.add('active');
   document.getElementById('subpanel-jogos').style.display=sub==='jogos'?'block':'none';
+  document.getElementById('subpanel-gerenciar').style.display=sub==='gerenciar'?'block':'none';
   document.getElementById('subpanel-podio').style.display=sub==='podio'?'block':'none';
   if(sub==='podio')renderPodioState();
+  if(sub==='gerenciar')initGerenciar();
 }
 
 // Converte xlsx/xls para {headers, data} usando SheetJS
@@ -704,10 +759,156 @@ function importarJson(event){
   const reader=new FileReader();reader.onload=function(e){try{const parsed=JSON.parse(e.target.result);if(typeof parsed!=='object'||!('apostas' in parsed)){document.getElementById('backupMsg').innerHTML=`<div class="alert alert-error">❌ Arquivo inválido.</div>`;return;}state=Object.assign({apostas:{},resultados:{},podio:null,podioBloqueado:false,jogosSalvos:[],jogoAtualResultados:null},parsed);saveState();atualizarRanking();renderCalendario(2026,6);document.getElementById('backupMsg').innerHTML=`<div class="alert alert-success">✅ Backup importado! ${Object.keys(state.apostas).length} jogo(s) carregados.</div>`;}catch(err){document.getElementById('backupMsg').innerHTML=`<div class="alert alert-error">❌ Erro: ${err.message}</div>`;}};reader.readAsText(file,'UTF-8');
 }
 
+// ===================== GERENCIAR =====================
+function initGerenciar(){
+  // Popula filtros
+  const diasSet=new Set();const nomesSet=new Set();
+  Object.keys(state.apostas).forEach(jid=>{
+    const j=JOGOS.find(x=>x.id===jid);if(!j)return;
+    diasSet.add(j.data);
+    state.apostas[jid].forEach(a=>nomesSet.add(a.nome));
+  });
+  const dSel=document.getElementById('gerFiltroDia');
+  const rVal=document.getElementById('gerFiltroRodada').value;
+  const diasFiltradas=[...diasSet].filter(d=>{
+    if(!rVal)return true;
+    return JOGOS.some(j=>j.data===d&&j.rodada===rVal&&state.apostas[j.id]?.length);
+  }).sort();
+  dSel.innerHTML='<option value="">Todos</option>'+diasFiltradas.map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
+  const nSel=document.getElementById('gerFiltroNome');
+  nSel.innerHTML='<option value="">Todos</option>'+[...nomesSet].sort().map(n=>`<option value="${n}">${n}</option>`).join('');
+  renderGerenciar();
+}
+
+function onGerFiltroRodadaChange(){
+  // Atualiza dias baseado na rodada
+  const rVal=document.getElementById('gerFiltroRodada').value;
+  const diasSet=new Set();
+  Object.keys(state.apostas).forEach(jid=>{
+    const j=JOGOS.find(x=>x.id===jid);if(!j)return;
+    if(!rVal||j.rodada===rVal)diasSet.add(j.data);
+  });
+  const dSel=document.getElementById('gerFiltroDia');
+  dSel.innerHTML='<option value="">Todos</option>'+[...diasSet].sort().map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
+  renderGerenciar();
+}
+
+function renderGerenciar(){
+  const list=document.getElementById('gerenciarList');
+  const filtroR=document.getElementById('gerFiltroRodada').value;
+  const filtroD=document.getElementById('gerFiltroDia').value;
+  const filtroN=document.getElementById('gerFiltroNome').value;
+
+  const jogosComApostas=JOGOS.filter(j=>
+    state.apostas[j.id]?.length>0&&
+    (!filtroR||j.rodada===filtroR)&&
+    (!filtroD||j.data===filtroD)
+  ).sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+
+  if(!jogosComApostas.length){list.innerHTML=`<div class="empty-state"><div class="icon">✏️</div>Nenhuma aposta salva para os filtros selecionados.</div>`;return;}
+
+  let html='';
+  jogosComApostas.forEach(j=>{
+    let apostas=state.apostas[j.id]||[];
+    if(filtroN)apostas=apostas.filter(a=>a.nome===filtroN);
+    if(!apostas.length)return;
+    html+=`<div class="ger-jogo-block">
+      <div class="ger-jogo-header">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</div>
+      <div class="ger-jogo-meta">${fmtData(j.data)} · ${j.hora} · Grupo ${j.grupo||'—'} · ${ROD_LABELS[j.rodada]||j.rodada}</div>`;
+    apostas.forEach(a=>{
+      html+=`<div class="ger-aposta-row">
+        <span class="ger-aposta-nome">${a.nome}</span>
+        <span class="ger-aposta-placar">${a.gA} × ${a.gB}</span>
+        <button class="ger-btn-edit" onclick="abrirEdicao('${j.id}','${a.nome.replace(/'/g,"\\'")}',${a.gA},${a.gB})">✏️ Editar</button>
+        <button class="ger-btn-del" onclick="abrirDelete('${j.id}','${a.nome.replace(/'/g,"\\'")}')">🗑️</button>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  list.innerHTML=html||`<div class="empty-state"><div class="icon">🔍</div>Nenhuma aposta para os filtros selecionados.</div>`;
+}
+
+// EDIÇÃO
+let _editCtx={jogoId:null,nome:null};
+function abrirEdicao(jogoId,nome,gA,gB){
+  _editCtx={jogoId,nome};
+  const j=JOGOS.find(x=>x.id===jogoId);
+  document.getElementById('editModalTitle').textContent='Editar palpite — '+nome;
+  document.getElementById('editModalSubtitle').textContent=`${j?.timeA} × ${j?.timeB} · ${fmtData(j?.data)}`;
+  document.getElementById('editLabelA').textContent=j?.timeA||'Time A';
+  document.getElementById('editLabelB').textContent=j?.timeB||'Time B';
+  document.getElementById('editGolsA').value=gA;
+  document.getElementById('editGolsB').value=gB;
+  document.getElementById('editModal').classList.add('open');
+}
+function fecharModal(){document.getElementById('editModal').classList.remove('open');}
+function confirmarEdicao(){
+  const {jogoId,nome}=_editCtx;
+  const gA=parseInt(document.getElementById('editGolsA').value)||0;
+  const gB=parseInt(document.getElementById('editGolsB').value)||0;
+  if(!state.apostas[jogoId])return;
+  const idx=state.apostas[jogoId].findIndex(a=>a.nome===nome);
+  if(idx>=0){state.apostas[jogoId][idx]={nome,gA,gB};saveState();atualizarRanking();renderGerenciar();}
+  fecharModal();
+}
+
+// DELETE
+let _delCtx={jogoId:null,nome:null};
+function abrirDelete(jogoId,nome){
+  _delCtx={jogoId,nome};
+  const j=JOGOS.find(x=>x.id===jogoId);
+  document.getElementById('deleteModalText').innerHTML=`Tem certeza que quer excluir o palpite de <strong>${nome}</strong> para <strong>${j?.timeA} × ${j?.timeB}</strong> (${fmtData(j?.data)})?`;
+  document.getElementById('deleteModal').classList.add('open');
+}
+function fecharModalDelete(){document.getElementById('deleteModal').classList.remove('open');}
+function confirmarDelete(){
+  const {jogoId,nome}=_delCtx;
+  if(!state.apostas[jogoId])return;
+  state.apostas[jogoId]=state.apostas[jogoId].filter(a=>a.nome!==nome);
+  if(!state.apostas[jogoId].length){delete state.apostas[jogoId];state.jogosSalvos=state.jogosSalvos.filter(id=>id!==jogoId);}
+  saveState();atualizarRanking();renderGerenciar();
+  fecharModalDelete();
+}
+
 function showMsg(id,type,msg){const el=document.getElementById(id);if(el)el.innerHTML=`<div class="alert alert-${type}">${msg}</div>`;}
 function saveState(){try{localStorage.setItem('bolao_v5',JSON.stringify(state));}catch(e){}}
 function loadState(){try{const s=localStorage.getItem('bolao_v5');if(s)state=Object.assign(state,JSON.parse(s));}catch(e){}}
 loadState();renderCalendario(2026,6);atualizarRanking();
 </script>
+<!-- MODAL EDIÇÃO -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <div class="modal-title" id="editModalTitle">Editar palpite</div>
+    <div style="text-align:center;margin-bottom:14px;font-size:.9rem;color:var(--texto-sec)" id="editModalSubtitle"></div>
+    <div style="display:flex;gap:16px;justify-content:center;align-items:center">
+      <div class="modal-field" style="margin:0;text-align:center">
+        <label id="editLabelA">Time A</label>
+        <input type="number" min="0" max="20" id="editGolsA" style="width:80px">
+      </div>
+      <span style="font-family:'Bebas Neue',cursive;font-size:1.8rem;color:var(--azul)">×</span>
+      <div class="modal-field" style="margin:0;text-align:center">
+        <label id="editLabelB">Time B</label>
+        <input type="number" min="0" max="20" id="editGolsB" style="width:80px">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cinza" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-verde" onclick="confirmarEdicao()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO DELETE -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <div class="modal-title">🗑️ Confirmar exclusão</div>
+    <p style="font-size:.88rem;color:var(--texto-sec);margin-bottom:6px" id="deleteModalText"></p>
+    <div class="modal-actions">
+      <button class="btn btn-cinza" onclick="fecharModalDelete()">Cancelar</button>
+      <button class="btn btn-danger" onclick="confirmarDelete()">🗑️ Excluir</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

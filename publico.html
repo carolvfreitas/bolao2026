@@ -53,7 +53,12 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
 .nome-cell{font-weight:700}
 .pais-cell{display:flex;align-items:center;gap:6px;font-weight:600}
 /* RESULTADOS */
-.rodada-header-label{background:var(--azul);color:#fff;font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:1px;padding:8px 14px;border-radius:8px;margin:14px 0 8px;display:block}
+.rodada-header-label{background:var(--azul);color:#fff;font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:1px;padding:8px 14px;border-radius:8px;margin:14px 0 8px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s}
+.rodada-header-label:hover{background:var(--azul-mid)}
+.rodada-header-label .rodada-arrow{transition:transform .2s;font-style:normal;font-family:sans-serif;font-size:.85rem;letter-spacing:0}
+.rodada-header-label.collapsed .rodada-arrow{transform:rotate(-90deg)}
+.rodada-jogos{overflow:hidden;transition:max-height .25s ease}
+.rodada-jogos.collapsed{display:none}
 .jogo-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cinza-bg);border-radius:10px;border:1px solid var(--cinza-borda);margin-bottom:8px}
 .jogo-hora-data{display:flex;flex-direction:column;min-width:52px;gap:1px}
 .jogo-hora{font-size:.75rem;color:var(--texto-sec);font-weight:700}
@@ -308,6 +313,12 @@ function renderPodio(){
   wrap.innerHTML=`<div style="overflow-x:auto"><table class="podio-table"><thead><tr><th>Participante</th><th>🥇 Campeão</th><th>🥈 Vice-Campeão</th><th>🥉 3º Lugar</th></tr></thead><tbody>${DADOS.podio.map(p=>`<tr><td class="nome-cell">${p.nome}</td><td>${renderPaisCell(p.campeao)}</td><td>${renderPaisCell(p.vice)}</td><td>${renderPaisCell(p.terceiro)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 
+function toggleRodada(el){
+  el.classList.toggle('collapsed');
+  const jogos=el.nextElementSibling;
+  jogos.classList.toggle('collapsed');
+}
+
 function renderResultados(){
   const wrap=document.getElementById('resultadosWrap');
   if(!DADOS)return;
@@ -322,7 +333,16 @@ function renderResultados(){
   let html='';
   ordem.forEach(r=>{
     if(!porRodada[r])return;
-    html+=`<div class="rodada-header-label">${ROD_LABELS[r]||r}</div>`;
+    const total=porRodada[r].length;
+    const comRes=porRodada[r].filter(j=>resultados[j.id]!==undefined).length;
+    const badge=comRes===total
+      ?`<span style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px;letter-spacing:0">✅ ${total} jogos</span>`
+      :`<span style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px;letter-spacing:0">${comRes}/${total}</span>`;
+    html+=`<div class="rodada-header-label" onclick="toggleRodada(this)">
+      <span>${ROD_LABELS[r]||r} ${badge}</span>
+      <span class="rodada-arrow">▼</span>
+    </div>`;
+    html+=`<div class="rodada-jogos">`;
     porRodada[r].forEach(j=>{
       const res=resultados[j.id];
       const placar=res?`<span class="jogo-placar">${res.gA} — ${res.gB}</span>`:`<span class="jogo-placar pendente">A jogar</span>`;
@@ -332,6 +352,7 @@ function renderResultados(){
         ${placar}
       </div>`;
     });
+    html+=`</div>`;
   });
   wrap.innerHTML=html;
 }
