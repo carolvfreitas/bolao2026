@@ -45,6 +45,41 @@
         "nome": "Fernando Barbosa",
         "gA": 2,
         "gB": 1
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 2,
+        "gB": 0
       }
     ],
     "M2": [
@@ -90,6 +125,41 @@
       },
       {
         "nome": "Fernando Barbosa",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Marcos Santiago",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Carolina Freitas",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Sousa",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Eduardo Portugal",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Guilherme Neri",
         "gA": 1,
         "gB": 0
       }
@@ -270,6 +340,48 @@
       "campeao": "Inglaterra",
       "vice": "França",
       "terceiro": "Espanha"
+    },
+    {
+      "nome": "Marcos Santiago",
+      "campeao": "Portugal",
+      "vice": "Inglaterra",
+      "terceiro": "Noruega"
+    },
+    {
+      "nome": "Carolina Freitas",
+      "campeao": "Brasil",
+      "vice": "França",
+      "terceiro": "Espanha"
+    },
+    {
+      "nome": "Dalila Carvalho",
+      "campeao": "Portugal",
+      "vice": "Espanha",
+      "terceiro": "Bélgica"
+    },
+    {
+      "nome": "Marcio Sousa",
+      "campeao": "Espanha",
+      "vice": "França",
+      "terceiro": "Portugal"
+    },
+    {
+      "nome": "Victor e Marialice Thibes",
+      "campeao": "Espanha",
+      "vice": "Brasil",
+      "terceiro": "França"
+    },
+    {
+      "nome": "Eduardo Portugal",
+      "campeao": "França",
+      "vice": "Portugal",
+      "terceiro": "Brasil"
+    },
+    {
+      "nome": "Guilherme Neri",
+      "campeao": "Portugal",
+      "vice": "França",
+      "terceiro": "Espanha"
     }
   ],
   "podioBloqueado": false,
@@ -288,5 +400,5 @@
     "M12"
   ],
   "jogoAtualResultados": null,
-  "_exportedAt": "2026-06-10T22:24:52.466Z"
+  "_exportedAt": "2026-06-11T01:17:53.520Z"
 }
