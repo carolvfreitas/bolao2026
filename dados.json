@@ -85,6 +85,11 @@
         "nome": "Alice Coelho",
         "gA": 2,
         "gB": 1
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 0,
+        "gB": 1
       }
     ],
     "M2": [
@@ -172,6 +177,11 @@
         "nome": "Alice Coelho",
         "gA": 2,
         "gB": 0
+      },
+      {
+        "nome": "Nalditon Leal",
+        "gA": 1,
+        "gB": 2
       }
     ],
     "M3": [
@@ -398,6 +408,12 @@
       "campeao": "Brasil",
       "vice": "Argentina",
       "terceiro": "França"
+    },
+    {
+      "nome": "Nalditon Leal",
+      "campeao": "Brasil",
+      "vice": "Espanha",
+      "terceiro": "França"
     }
   ],
   "podioBloqueado": false,
@@ -416,5 +432,5 @@
     "M12"
   ],
   "jogoAtualResultados": "M1",
-  "_exportedAt": "2026-06-11T01:56:02.359Z"
+  "_exportedAt": "2026-06-11T03:33:18.540Z"
 }
