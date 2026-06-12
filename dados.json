@@ -284,6 +284,16 @@
         "nome": "Leonardo Tranzillo",
         "gA": 3,
         "gB": 2
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 2,
+        "gB": 2
       }
     ],
     "M4": [
@@ -365,6 +375,16 @@
       {
         "nome": "Leonardo Tranzillo",
         "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 1,
         "gB": 0
       }
     ],
@@ -1553,6 +1573,10 @@
     "M1": {
       "gA": 2,
       "gB": 0
+    },
+    "M2": {
+      "gA": 2,
+      "gB": 1
     }
   },
   "podio": [
@@ -1704,6 +1728,6 @@
     "M23",
     "M24"
   ],
-  "jogoAtualResultados": "M1",
-  "_exportedAt": "2026-06-11T21:05:15.333Z"
+  "jogoAtualResultados": "M2",
+  "_exportedAt": "2026-06-12T12:14:54.924Z"
 }
