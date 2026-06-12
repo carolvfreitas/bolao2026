@@ -880,9 +880,9 @@ function renderGerenciar(){
           <button class="ger-btn-del" onclick="abrirDelete('${j.id}','${nome.replace(/'/g,"\\'")}')">🗑️</button>
         </div>`;
       } else if(apos12h){
-        html+=`<div class="ger-aposta-row"><span class="ger-aposta-nome">${nome}</span><span style="font-size:.78rem;color:#c0392b;font-weight:700">Sem aposta — 0pt</span></div>`;
+        html+=`<div class="ger-aposta-row"><span class="ger-aposta-nome">${nome}</span><span style="font-size:.78rem;color:#c0392b;font-weight:700;flex:1">Sem aposta — 0pt</span><button class="ger-btn-edit" onclick="abrirEdicao('${j.id}','${nome.replace(/'/g,"\\'")}',0,0,true)">✏️ Inserir</button></div>`;
       } else {
-        html+=`<div class="ger-aposta-row"><span class="ger-aposta-nome">${nome}</span><span style="font-size:.78rem;color:var(--texto-sec);font-style:italic">Aposta pendente</span></div>`;
+        html+=`<div class="ger-aposta-row"><span class="ger-aposta-nome">${nome}</span><span style="font-size:.78rem;color:var(--texto-sec);font-style:italic;flex:1">Aposta pendente</span><button class="ger-btn-edit" onclick="abrirEdicao('${j.id}','${nome.replace(/'/g,"\\'")}',0,0,true)">✏️ Inserir</button></div>`;
       }
     });
     html+=`</div>`;
@@ -890,12 +890,12 @@ function renderGerenciar(){
   list.innerHTML=html||`<div class="empty-state"><div class="icon">🔍</div>Nenhuma aposta para os filtros selecionados.</div>`;
 }
 
-// EDIÇÃO
-let _editCtx={jogoId:null,nome:null};
-function abrirEdicao(jogoId,nome,gA,gB){
-  _editCtx={jogoId,nome};
+// EDIÇÃO / INSERÇÃO
+let _editCtx={jogoId:null,nome:null,novo:false};
+function abrirEdicao(jogoId,nome,gA,gB,novo=false){
+  _editCtx={jogoId,nome,novo};
   const j=JOGOS.find(x=>x.id===jogoId);
-  document.getElementById('editModalTitle').textContent='Editar palpite — '+nome;
+  document.getElementById('editModalTitle').textContent=(novo?'Inserir palpite — ':'Editar palpite — ')+nome;
   document.getElementById('editModalSubtitle').textContent=`${j?.timeA} × ${j?.timeB} · ${fmtData(j?.data)}`;
   document.getElementById('editLabelA').textContent=j?.timeA||'Time A';
   document.getElementById('editLabelB').textContent=j?.timeB||'Time B';
@@ -905,12 +905,18 @@ function abrirEdicao(jogoId,nome,gA,gB){
 }
 function fecharModal(){document.getElementById('editModal').classList.remove('open');}
 function confirmarEdicao(){
-  const {jogoId,nome}=_editCtx;
+  const {jogoId,nome,novo}=_editCtx;
   const gA=parseInt(document.getElementById('editGolsA').value)||0;
   const gB=parseInt(document.getElementById('editGolsB').value)||0;
-  if(!state.apostas[jogoId])return;
+  if(!state.apostas[jogoId])state.apostas[jogoId]=[];
   const idx=state.apostas[jogoId].findIndex(a=>a.nome===nome);
-  if(idx>=0){state.apostas[jogoId][idx]={nome,gA,gB};saveState();atualizarRanking();renderGerenciar();}
+  if(idx>=0){
+    state.apostas[jogoId][idx]={nome,gA,gB};
+  } else {
+    state.apostas[jogoId].push({nome,gA,gB});
+    if(!state.jogosSalvos.includes(jogoId))state.jogosSalvos.push(jogoId);
+  }
+  saveState();atualizarRanking();renderGerenciar();
   fecharModal();
 }
 
