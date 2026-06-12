@@ -149,6 +149,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
   <div class="header-inner">
     <div class="title">⚽ Bolão dos PatiNANAUdores</div>
     <div class="subtitle">FIFA World Cup 2026 — Canada, USA &amp; Mexico</div>
+    <div style="color:rgba(255,255,255,.45);font-size:.72rem;margin-top:2px;margin-bottom:14px">Versão: 12/06/2026 às 10:11</div>
     <div class="tabs-main">
       <button class="tab-main active" onclick="switchTab('apostas',event)">🎯 Apostas</button>
       <button class="tab-main" onclick="switchTab('resultados',event)">📋 Resultados</button>
@@ -361,11 +362,22 @@ const ROD_LABELS={'1':'1ª Rodada','2':'2ª Rodada','3':'3ª Rodada','16avos':'1
 const PARTICIPANTES_VALIDOS=new Set([
   'Alice e Paulo','Aloizio Ettinger','Andre Nascimento','Carolina Freitas',
   'Dalila Carvalho','Eduardo Parisi','Eduardo Portugal','Fernando Barbosa',
-  'Gabriel Oliveira','Giulia e Rodrigo Thibes','Guilherme Neri','Henrique Santiago',
-  'Leonardo Tranzillo','Marcio Balarini','Marcio Sousa','Marcos Santiago',
-  'Nalditon Leal','Pablo Mazzinghy','Thiago Games','Victor e Marialice Thibes',
-  'Vinicius Cruzero'
+  'Gabriel Oliveira','Giulia e Rodrigo Thibes','Guilherme Neri','Leonardo Tranzillo',
+  'Marcio Balarini','Marcio Sousa','Marcos Santiago','Nalditon Leal',
+  'Pablo Mazzinghy','Thiago Games','Victor e Marialice Thibes','Vinicius Cruzero'
 ]);
+const PARTICIPANTES_LISTA=[
+  'Alice e Paulo','Aloizio Ettinger','Andre Nascimento','Carolina Freitas',
+  'Dalila Carvalho','Eduardo Parisi','Eduardo Portugal','Fernando Barbosa',
+  'Gabriel Oliveira','Giulia e Rodrigo Thibes','Guilherme Neri','Leonardo Tranzillo',
+  'Marcio Balarini','Marcio Sousa','Marcos Santiago','Nalditon Leal',
+  'Pablo Mazzinghy','Thiago Games','Victor e Marialice Thibes','Vinicius Cruzero'
+];
+// Aliases automáticos de nomes incorretos → nome canônico
+const NOME_ALIASES={
+  'Alice Coelho':'Alice e Paulo',
+  'Marcio Brasil Balarini':'Marcio Balarini'
+};
 
 let state={apostas:{},resultados:{},podio:null,podioBloqueado:false,jogosSalvos:[],jogoAtualResultados:null};
 let pendingPreview=null;
@@ -461,7 +473,9 @@ function processarDados({headers,data}){
   const idxNome=colTipos.findIndex(ct=>ct.tipo==='nome');
   const warnings=[];const nomeInvalidos=[];const jogoApostasMap={};jogosDetectados.forEach(jd=>{jogoApostasMap[jd.jogo.id]=[];});const podioRows=[];
   data.forEach(row=>{
-    const nome=(idxNome>=0?row[idxNome]:'').trim();if(!nome)return;
+    const nomeRaw=(idxNome>=0?row[idxNome]:'').trim();
+    const nome=NOME_ALIASES[nomeRaw]||nomeRaw;
+    if(!nome)return;
     if(!PARTICIPANTES_VALIDOS.has(nome)){if(!nomeInvalidos.includes(nome))nomeInvalidos.push(nome);}
     if(temPodio&&!state.podioBloqueado)podioRows.push({nome,campeao:(idxCamp>=0?row[idxCamp]:'').trim(),vice:(idxVice>=0?row[idxVice]:'').trim(),terceiro:(idxTerc>=0?row[idxTerc]:'').trim()});
     jogosDetectados.forEach(jd=>{
@@ -586,29 +600,42 @@ function renderPreviewFiltrado(){
   const filtroR=document.getElementById('previewFiltroRodada').value;
   const filtroD=document.getElementById('previewFiltroDia').value;
   const jogos=jogosDetectados.filter(jd=>(!filtroR||jd.jogo.rodada===filtroR)&&(!filtroD||jd.jogo.data===filtroD));
+  const agora=new Date();
   let html='';
   jogos.forEach(jd=>{
     const jogo=jd.jogo,apostas=jogoApostasMap[jogo.id]||[];
     const jaNoJogo=new Set((state.apostas[jogo.id]||[]).map(a=>a.nome));
     const novas=apostas.filter(a=>!a.bloqueado&&!jaNoJogo.has(a.nome));
-    const jaSalvas=apostas.filter(a=>!a.bloqueado&&jaNoJogo.has(a.nome));
-    const temSalvos=jaNoJogo.size>0;
-    const badge=novas.length>0?`<span class="jogo-preview-badge">${novas.length} novo(s)</span>`:(temSalvos?`<span class="jogo-preview-badge" style="background:#e6f7ed;color:#007a2e">✅ Sem novidades</span>`:'');
+    const badge=novas.length>0?`<span class="jogo-preview-badge">${novas.length} novo(s)</span>`:(jaNoJogo.size>0?`<span class="jogo-preview-badge" style="background:#e6f7ed;color:#007a2e">✅ Sem novidades</span>`:'');
+    // Mapa nome→aposta desta prévia
+    const apostasMap={};apostas.forEach(a=>{if(!a.bloqueado)apostasMap[a.nome]=a;});
+    // Corte 12h do dia do jogo
+    const jogoDate=new Date(jogo.data+'T12:00:00-03:00');
+    const apos12h=agora>=jogoDate;
     html+=`<div class="jogo-preview-block"><div class="jogo-preview-header"><div style="flex:1">
       <div class="jogo-preview-times">${getFlag(jogo.timeA)} ${jogo.timeA} × ${jogo.timeB} ${getFlag(jogo.timeB)}</div>
       <div class="jogo-preview-meta">${fmtData(jogo.data)} · ${horaTag(jogo.hora)} · Grupo ${jogo.grupo} · ${jogo.local} · ${ROD_LABELS[jogo.rodada]||jogo.rodada}</div>
     </div>${badge}</div>`;
-    if(!apostas.length){html+=`<p style="font-size:.8rem;color:var(--texto-sec)">Nenhum palpite encontrado para este jogo.</p>`;}
-    else{
-      html+=`<div class="apostas-rows">`;
-      apostas.forEach(a=>{
-        if(a.bloqueado){html+=`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-warn">⚠️ ${a.motivo}</span></div>`;}
-        else if(jaNoJogo.has(a.nome)){html+=`<div class="aposta-row" style="opacity:.5"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span><span style="font-size:.7rem;color:var(--texto-sec);margin-left:4px">já salvo</span></div>`;}
-        else{html+=`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span><span style="font-size:.7rem;color:var(--verde-dark);font-weight:700;margin-left:4px">novo</span></div>`;}
-      });
-      html+=`</div>`;
-    }
-    html+=`</div>`;
+    html+=`<div class="apostas-rows">`;
+    [...PARTICIPANTES_LISTA].sort((a,b)=>a.localeCompare(b,'pt-BR')).forEach(nome=>{
+      const jaNoJogoNome=jaNoJogo.has(nome);
+      const a=apostasMap[nome];
+      if(a&&a.bloqueado){
+        html+=`<div class="aposta-row"><span class="aposta-nome">${nome}</span><span class="aposta-warn">⚠️ ${a.motivo}</span></div>`;
+      } else if(a&&jaNoJogoNome){
+        html+=`<div class="aposta-row" style="opacity:.5"><span class="aposta-nome">${nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span><span style="font-size:.7rem;color:var(--texto-sec);margin-left:4px">já salvo</span></div>`;
+      } else if(a){
+        html+=`<div class="aposta-row"><span class="aposta-nome">${nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span><span style="font-size:.7rem;color:var(--verde-dark);font-weight:700;margin-left:4px">novo</span></div>`;
+      } else if(jaNoJogoNome){
+        const ap=state.apostas[jogo.id]?.find(x=>x.nome===nome);
+        if(ap)html+=`<div class="aposta-row" style="opacity:.5"><span class="aposta-nome">${nome}</span><span class="aposta-placar">${ap.gA} × ${ap.gB}</span><span style="font-size:.7rem;color:var(--texto-sec);margin-left:4px">já salvo</span></div>`;
+      } else if(apos12h){
+        html+=`<div class="aposta-row"><span class="aposta-nome">${nome}</span><span style="font-size:.78rem;color:#c0392b;font-weight:700">Sem aposta — 0pt</span></div>`;
+      } else {
+        html+=`<div class="aposta-row"><span class="aposta-nome">${nome}</span><span style="font-size:.78rem;color:var(--texto-sec);font-style:italic">Aposta pendente</span></div>`;
+      }
+    });
+    html+=`</div></div>`;
   });
   document.getElementById('jogosPreviewList').innerHTML=html||`<div class="empty-state" style="padding:20px"><div class="icon">🔍</div>Nenhum jogo para os filtros selecionados.</div>`;
   const av=document.getElementById('jogosSalvosAviso');av.innerHTML=warnings.length?`<div class="alert alert-warn" style="margin-top:8px"><strong>⚠️ Atenção:</strong><br>`+warnings.map(w=>`• ${w}`).join('<br>')+`</div>`:'';
@@ -821,31 +848,42 @@ function renderGerenciar(){
 
   if(!jogosComApostas.length){list.innerHTML=`<div class="empty-state"><div class="icon">✏️</div>Nenhuma aposta salva para os filtros selecionados.</div>`;return;}
 
+  const agora=new Date();
   let html='';
   jogosComApostas.forEach(j=>{
-    let apostas=state.apostas[j.id]||[];
-    if(filtroN)apostas=apostas.filter(a=>a.nome===filtroN);
-    if(!apostas.length)return;
+    const apostasMap={};
+    (state.apostas[j.id]||[]).forEach(a=>{apostasMap[a.nome]=a;});
     const res=state.resultados[j.id];
     const resTag=res
       ?`<span style="font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--amarelo);margin-left:8px">${res.gA}—${res.gB}</span>`
       :`<span style="font-size:.72rem;color:rgba(255,255,255,.5);margin-left:8px">Aguardando resultado</span>`;
+    const jogoDate=new Date(j.data+'T12:00:00-03:00');
+    const apos12h=agora>=jogoDate;
+    if(filtroN&&!apostasMap[filtroN]&&!apos12h&&!res)return; // filtro por nome: só mostra se tem aposta ou resultado
     html+=`<div class="ger-jogo-block">
       <div class="ger-jogo-header" style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
         <span>${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</span>${resTag}
       </div>
       <div class="ger-jogo-meta">${fmtData(j.data)} · ${horaTag(j.hora)} · Grupo ${j.grupo||'—'} · ${ROD_LABELS[j.rodada]||j.rodada}</div>`;
-    apostas.forEach(a=>{
-      const r=calcularResultadoAposta(a.gA,a.gB,res);
-      const badge=r.icon?`<span title="${r.label||''}" style="font-size:1rem;cursor:default">${r.icon}</span>`:'';
-      const pts=r.pts!==null?`<span style="font-size:.72rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'};margin-right:2px">${r.pts}pt</span>`:'';
-      html+=`<div class="ger-aposta-row">
-        <span class="ger-aposta-nome">${a.nome}</span>
-        <span class="ger-aposta-placar">${a.gA} × ${a.gB}</span>
-        ${pts}${badge}
-        <button class="ger-btn-edit" onclick="abrirEdicao('${j.id}','${a.nome.replace(/'/g,"\\'")}',${a.gA},${a.gB})">✏️</button>
-        <button class="ger-btn-del" onclick="abrirDelete('${j.id}','${a.nome.replace(/'/g,"\\'")}')">🗑️</button>
-      </div>`;
+    const listaFiltrada=filtroN?[filtroN]:[...PARTICIPANTES_LISTA].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+    listaFiltrada.forEach(nome=>{
+      const a=apostasMap[nome];
+      if(a){
+        const r=calcularResultadoAposta(a.gA,a.gB,res);
+        const badge=r.icon?`<span title="${r.label||''}" style="font-size:1rem;cursor:default">${r.icon}</span>`:'';
+        const pts=r.pts!==null?`<span style="font-size:.72rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'};margin-right:2px">${r.pts}pt</span>`:'';
+        html+=`<div class="ger-aposta-row">
+          <span class="ger-aposta-nome">${nome}</span>
+          <span class="ger-aposta-placar">${a.gA} × ${a.gB}</span>
+          ${pts}${badge}
+          <button class="ger-btn-edit" onclick="abrirEdicao('${j.id}','${nome.replace(/'/g,"\\'")}',${a.gA},${a.gB})">✏️</button>
+          <button class="ger-btn-del" onclick="abrirDelete('${j.id}','${nome.replace(/'/g,"\\'")}')">🗑️</button>
+        </div>`;
+      } else if(apos12h){
+        html+=`<div class="ger-aposta-row"><span class="ger-aposta-nome">${nome}</span><span style="font-size:.78rem;color:#c0392b;font-weight:700">Sem aposta — 0pt</span></div>`;
+      } else {
+        html+=`<div class="ger-aposta-row"><span class="ger-aposta-nome">${nome}</span><span style="font-size:.78rem;color:var(--texto-sec);font-style:italic">Aposta pendente</span></div>`;
+      }
     });
     html+=`</div>`;
   });
