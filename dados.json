@@ -473,6 +473,16 @@
         "nome": "Victor e Marialice Thibes",
         "gA": 0,
         "gB": 2
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 1,
+        "gB": 3
       }
     ],
     "M7": [
@@ -560,6 +570,16 @@
         "nome": "Victor e Marialice Thibes",
         "gA": 1,
         "gB": 0
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 2,
+        "gB": 1
       }
     ],
     "M8": [
@@ -647,6 +667,16 @@
         "nome": "Victor e Marialice Thibes",
         "gA": 0,
         "gB": 3
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 0
       }
     ],
     "M5": [
@@ -734,6 +764,16 @@
         "nome": "Victor e Marialice Thibes",
         "gA": 0,
         "gB": 1
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 1,
+        "gB": 3
       }
     ],
     "M9": [
@@ -2033,5 +2073,5 @@
     "M24"
   ],
   "jogoAtualResultados": "M3",
-  "_exportedAt": "2026-06-12T21:00:07.503Z"
+  "_exportedAt": "2026-06-12T21:04:01.910Z"
 }
