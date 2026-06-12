@@ -282,6 +282,14 @@ function toggleViewMode(){
   renderApostasPublico();
 }
 
+function calcularResultadoAposta(gA,gB,res){
+  if(!res)return{icon:'',pts:null};
+  if(gA===res.gA&&gB===res.gB)return{icon:'✅',pts:3,label:'Placar exato'};
+  const vP=gA>gB?'A':gA<gB?'B':'E',vR=res.gA>res.gB?'A':res.gA<res.gB?'B':'E';
+  if(vP===vR)return{icon:'🟡',pts:1,label:'Acertou o vencedor'};
+  return{icon:'❌',pts:0,label:'Errou'};
+}
+
 function renderApostasPublico(){
   if(!DADOS)return;
   const apostas=DADOS.apostas||{};
@@ -302,12 +310,21 @@ function renderApostasPublico(){
       let apostasJogo=apostas[j.id]||[];
       if(filtroP)apostasJogo=apostasJogo.filter(a=>a.nome===filtroP);
       if(!apostasJogo.length)return;
+      const res=DADOS.resultados?.[j.id];
+      const resTag=res
+        ?`<span style="font-size:.8rem;font-weight:800;color:var(--verde-dark);margin-left:6px">Resultado: ${res.gA}—${res.gB}</span>`
+        :'';
       html+=`<div class="jogo-preview-block">
         <div class="jogo-preview-header">
-          <div class="jogo-preview-times">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</div>
+          <div class="jogo-preview-times">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}${resTag}</div>
           <div class="jogo-preview-meta">${fmtData(j.data)} · ${horaTag(j.hora)} · Grupo ${j.grupo} · ${j.local} · ${ROD_LABELS[j.rodada]||j.rodada}</div>
         </div>
-        <div class="apostas-rows">${apostasJogo.map(a=>`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span></div>`).join('')}</div>
+        <div class="apostas-rows">${apostasJogo.map(a=>{
+          const r=calcularResultadoAposta(a.gA,a.gB,res);
+          const badge=r.icon?`<span title="${r.label||''}" style="font-size:1rem">${r.icon}</span>`:'';
+          const pts=r.pts!==null?`<span style="font-size:.72rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'}">${r.pts}pt</span>`:'';
+          return`<div class="aposta-row"><span class="aposta-nome">${a.nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span>${pts} ${badge}</div>`;
+        }).join('')}</div>
       </div>`;
     });
     list.innerHTML=html||`<div class="empty-state"><div class="icon">🔍</div>Nenhum palpite encontrado para os filtros selecionados.</div>`;
@@ -332,12 +349,18 @@ function renderApostasPublico(){
       jogosNome.forEach(j=>{
         const ap=apostas[j.id].find(a=>a.nome===nome);
         if(!ap)return;
+        const res=DADOS.resultados?.[j.id];
+        const r=calcularResultadoAposta(ap.gA,ap.gB,res);
+        const badge=r.icon?`<span title="${r.label||''}" style="font-size:1rem">${r.icon}</span>`:'';
+        const pts=r.pts!==null?`<span style="font-size:.72rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'};margin-right:4px">${r.pts}pt</span>`:'';
+        const resTag=res?`<span style="font-size:.72rem;color:var(--texto-sec)">Real: ${res.gA}—${res.gB}</span>`:'';
         html+=`<div class="aposta-row">
           <div style="flex:1">
             <div style="font-weight:700;font-size:.88rem">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</div>
             <div style="font-size:.72rem;color:var(--texto-sec);margin-top:2px">${fmtData(j.data)} · ${horaTag(j.hora)} · Grupo ${j.grupo}</div>
           </div>
           <span class="aposta-placar">${ap.gA} × ${ap.gB}</span>
+          ${resTag} ${pts}${badge}
         </div>`;
       });
       html+=`</div></div>`;
