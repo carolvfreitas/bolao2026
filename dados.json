@@ -453,6 +453,26 @@
         "nome": "Leonardo Tranzillo",
         "gA": 3,
         "gB": 4
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 0,
+        "gB": 3
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 0,
+        "gB": 2
       }
     ],
     "M7": [
@@ -520,6 +540,26 @@
         "nome": "Leonardo Tranzillo",
         "gA": 3,
         "gB": 1
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 1,
+        "gB": 0
       }
     ],
     "M8": [
@@ -587,6 +627,26 @@
         "nome": "Leonardo Tranzillo",
         "gA": 1,
         "gB": 1
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 2,
+        "gB": 4
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 0,
+        "gB": 3
       }
     ],
     "M5": [
@@ -654,6 +714,26 @@
         "nome": "Leonardo Tranzillo",
         "gA": 0,
         "gB": 3
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 3,
+        "gB": 2
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 0,
+        "gB": 1
       }
     ],
     "M9": [
@@ -720,6 +800,16 @@
       {
         "nome": "Leonardo Tranzillo",
         "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 5,
+        "gB": 0
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 5,
         "gB": 0
       }
     ],
@@ -788,6 +878,16 @@
         "nome": "Leonardo Tranzillo",
         "gA": 2,
         "gB": 2
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 1,
+        "gB": 1
       }
     ],
     "M10": [
@@ -853,6 +953,16 @@
       },
       {
         "nome": "Leonardo Tranzillo",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 3,
+        "gB": 2
+      },
+      {
+        "nome": "Pablo Mazzinghy",
         "gA": 1,
         "gB": 2
       }
@@ -922,6 +1032,16 @@
         "nome": "Leonardo Tranzillo",
         "gA": 2,
         "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 1,
+        "gB": 0
       }
     ],
     "M13": [
@@ -978,6 +1098,21 @@
       {
         "nome": "Carolina Freitas",
         "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 4,
+        "gB": 2
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 6,
         "gB": 0
       }
     ],
@@ -1036,6 +1171,21 @@
         "nome": "Carolina Freitas",
         "gA": 0,
         "gB": 2
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 1,
+        "gB": 3
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 1,
+        "gB": 2
       }
     ],
     "M14": [
@@ -1093,6 +1243,21 @@
         "nome": "Carolina Freitas",
         "gA": 2,
         "gB": 1
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 2,
+        "gB": 0
       }
     ],
     "M16": [
@@ -1150,6 +1315,21 @@
         "nome": "Carolina Freitas",
         "gA": 1,
         "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Pablo Mazzinghy",
+        "gA": 1,
+        "gB": 6
       }
     ],
     "M20": [
@@ -1201,6 +1381,21 @@
       {
         "nome": "Carolina Freitas",
         "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 2,
         "gB": 0
       }
     ],
@@ -1254,6 +1449,21 @@
         "nome": "Carolina Freitas",
         "gA": 2,
         "gB": 1
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 3,
+        "gB": 3
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 3,
+        "gB": 1
       }
     ],
     "M19": [
@@ -1305,6 +1515,21 @@
       {
         "nome": "Carolina Freitas",
         "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 0,
         "gB": 2
       }
     ],
@@ -1358,6 +1583,21 @@
         "nome": "Carolina Freitas",
         "gA": 2,
         "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 2,
+        "gB": 1
       }
     ],
     "M21": [
@@ -1410,6 +1650,21 @@
         "nome": "Carolina Freitas",
         "gA": 3,
         "gB": 1
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 4,
+        "gB": 1
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 3,
+        "gB": 0
       }
     ],
     "M22": [
@@ -1460,6 +1715,21 @@
       },
       {
         "nome": "Carolina Freitas",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 3,
+        "gB": 2
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Guilherme Neri",
         "gA": 2,
         "gB": 1
       }
@@ -1514,6 +1784,21 @@
         "nome": "Carolina Freitas",
         "gA": 1,
         "gB": 0
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
+        "gA": 1,
+        "gB": 0
       }
     ],
     "M24": [
@@ -1564,6 +1849,21 @@
       },
       {
         "nome": "Carolina Freitas",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Aloizio Ettinger",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Dalila Carvalho",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Guilherme Neri",
         "gA": 0,
         "gB": 1
       }
@@ -1729,5 +2029,5 @@
     "M24"
   ],
   "jogoAtualResultados": "M2",
-  "_exportedAt": "2026-06-12T12:14:54.924Z"
+  "_exportedAt": "2026-06-12T13:04:32.652Z"
 }
