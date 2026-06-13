@@ -483,6 +483,11 @@
         "nome": "Fernando Barbosa",
         "gA": 1,
         "gB": 3
+      },
+      {
+        "nome": "Marcio Souza",
+        "gA": 1,
+        "gB": 4
       }
     ],
     "M7": [
@@ -579,6 +584,11 @@
       {
         "nome": "Fernando Barbosa",
         "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Souza",
+        "gA": 3,
         "gB": 1
       }
     ],
@@ -677,6 +687,11 @@
         "nome": "Fernando Barbosa",
         "gA": 3,
         "gB": 0
+      },
+      {
+        "nome": "Marcio Souza",
+        "gA": 0,
+        "gB": 3
       }
     ],
     "M5": [
@@ -774,6 +789,11 @@
         "nome": "Fernando Barbosa",
         "gA": 1,
         "gB": 3
+      },
+      {
+        "nome": "Marcio Souza",
+        "gA": 1,
+        "gB": 2
       }
     ],
     "M9": [
@@ -2177,5 +2197,5 @@
     "M24"
   ],
   "jogoAtualResultados": "M4",
-  "_exportedAt": "2026-06-13T03:10:53.034Z"
+  "_exportedAt": "2026-06-13T03:24:03.572Z"
 }
