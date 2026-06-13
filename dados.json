@@ -851,6 +851,21 @@
         "nome": "Pablo Mazzinghy",
         "gA": 5,
         "gB": 0
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 5,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 0
       }
     ],
     "M11": [
@@ -928,6 +943,21 @@
         "nome": "Pablo Mazzinghy",
         "gA": 1,
         "gB": 1
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 2,
+        "gB": 2
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 1,
+        "gB": 2
       }
     ],
     "M10": [
@@ -1005,6 +1035,21 @@
         "nome": "Pablo Mazzinghy",
         "gA": 1,
         "gB": 2
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 0,
+        "gB": 1
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 1
       }
     ],
     "M12": [
@@ -1082,6 +1127,21 @@
         "nome": "Pablo Mazzinghy",
         "gA": 1,
         "gB": 0
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 1,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 2,
+        "gB": 0
       }
     ],
     "M13": [
@@ -1153,6 +1213,16 @@
       {
         "nome": "Pablo Mazzinghy",
         "gA": 6,
+        "gB": 0
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 5,
+        "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 4,
         "gB": 0
       }
     ],
@@ -1226,6 +1296,16 @@
         "nome": "Pablo Mazzinghy",
         "gA": 1,
         "gB": 2
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 0,
+        "gB": 2
       }
     ],
     "M14": [
@@ -1298,6 +1378,16 @@
         "nome": "Pablo Mazzinghy",
         "gA": 2,
         "gB": 0
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 1
       }
     ],
     "M16": [
@@ -1370,6 +1460,16 @@
         "nome": "Pablo Mazzinghy",
         "gA": 1,
         "gB": 6
+      },
+      {
+        "nome": "Marcio Balarini",
+        "gA": 0,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 1,
+        "gB": 2
       }
     ],
     "M20": [
@@ -1921,6 +2021,10 @@
     "M3": {
       "gA": 1,
       "gB": 1
+    },
+    "M4": {
+      "gA": 4,
+      "gB": 1
     }
   },
   "podio": [
@@ -2072,6 +2176,6 @@
     "M23",
     "M24"
   ],
-  "jogoAtualResultados": "M3",
-  "_exportedAt": "2026-06-12T21:04:01.910Z"
+  "jogoAtualResultados": "M4",
+  "_exportedAt": "2026-06-13T03:10:53.034Z"
 }
