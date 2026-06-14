@@ -866,6 +866,11 @@
         "nome": "Fernando Barbosa",
         "gA": 3,
         "gB": 0
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 3,
+        "gB": 0
       }
     ],
     "M11": [
@@ -956,6 +961,11 @@
       },
       {
         "nome": "Fernando Barbosa",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
         "gA": 1,
         "gB": 2
       }
@@ -1050,6 +1060,11 @@
         "nome": "Fernando Barbosa",
         "gA": 3,
         "gB": 1
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 1,
+        "gB": 0
       }
     ],
     "M12": [
@@ -1142,6 +1157,11 @@
         "nome": "Fernando Barbosa",
         "gA": 2,
         "gB": 0
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 2,
+        "gB": 1
       }
     ],
     "M13": [
@@ -1222,6 +1242,16 @@
       },
       {
         "nome": "Fernando Barbosa",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 4,
+        "gB": 0
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
         "gA": 4,
         "gB": 0
       }
@@ -1306,6 +1336,16 @@
         "nome": "Fernando Barbosa",
         "gA": 0,
         "gB": 2
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 1,
+        "gB": 2
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 0,
+        "gB": 1
       }
     ],
     "M14": [
@@ -1387,6 +1427,16 @@
       {
         "nome": "Fernando Barbosa",
         "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 1,
         "gB": 1
       }
     ],
@@ -1470,6 +1520,16 @@
         "nome": "Fernando Barbosa",
         "gA": 1,
         "gB": 2
+      },
+      {
+        "nome": "Thiago Games",
+        "gA": 1,
+        "gB": 1
+      },
+      {
+        "nome": "Victor e Marialice Thibes",
+        "gA": 1,
+        "gB": 0
       }
     ],
     "M20": [
@@ -1535,6 +1595,11 @@
       },
       {
         "nome": "Guilherme Neri",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
         "gA": 2,
         "gB": 0
       }
@@ -1604,6 +1669,11 @@
         "nome": "Guilherme Neri",
         "gA": 3,
         "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 1
       }
     ],
     "M19": [
@@ -1669,6 +1739,11 @@
       },
       {
         "nome": "Guilherme Neri",
+        "gA": 0,
+        "gB": 2
+      },
+      {
+        "nome": "Fernando Barbosa",
         "gA": 0,
         "gB": 2
       }
@@ -1738,6 +1813,11 @@
         "nome": "Guilherme Neri",
         "gA": 2,
         "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 1
       }
     ],
     "M21": [
@@ -1803,6 +1883,16 @@
       },
       {
         "nome": "Guilherme Neri",
+        "gA": 3,
+        "gB": 0
+      },
+      {
+        "nome": "Andre Nascimento",
+        "gA": 3,
+        "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
         "gA": 3,
         "gB": 0
       }
@@ -1872,6 +1962,16 @@
         "nome": "Guilherme Neri",
         "gA": 2,
         "gB": 1
+      },
+      {
+        "nome": "Andre Nascimento",
+        "gA": 2,
+        "gB": 0
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 2,
+        "gB": 1
       }
     ],
     "M23": [
@@ -1939,6 +2039,16 @@
         "nome": "Guilherme Neri",
         "gA": 1,
         "gB": 0
+      },
+      {
+        "nome": "Andre Nascimento",
+        "gA": 2,
+        "gB": 1
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 1
       }
     ],
     "M24": [
@@ -2006,6 +2116,16 @@
         "nome": "Guilherme Neri",
         "gA": 0,
         "gB": 1
+      },
+      {
+        "nome": "Andre Nascimento",
+        "gA": 1,
+        "gB": 3
+      },
+      {
+        "nome": "Fernando Barbosa",
+        "gA": 3,
+        "gB": 0
       }
     ]
   },
@@ -2032,6 +2152,10 @@
     },
     "M7": {
       "gA": 1,
+      "gB": 1
+    },
+    "M8": {
+      "gA": 0,
       "gB": 1
     }
   },
@@ -2184,6 +2308,6 @@
     "M23",
     "M24"
   ],
-  "jogoAtualResultados": "M7",
-  "_exportedAt": "2026-06-14T00:05:56.253Z"
+  "jogoAtualResultados": "M8",
+  "_exportedAt": "2026-06-14T03:03:19.682Z"
 }
