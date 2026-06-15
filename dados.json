@@ -2169,6 +2169,10 @@
     "M10": {
       "gA": 2,
       "gB": 2
+    },
+    "M11": {
+      "gA": 1,
+      "gB": 0
     }
   },
   "podio": [
@@ -2320,6 +2324,6 @@
     "M23",
     "M24"
   ],
-  "jogoAtualResultados": "M10",
-  "_exportedAt": "2026-06-14T22:14:39.477Z"
+  "jogoAtualResultados": "M11",
+  "_exportedAt": "2026-06-15T01:16:37.432Z"
 }
