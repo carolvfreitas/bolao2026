@@ -175,7 +175,10 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
   <div class="header-inner">
     <div class="title">⚽ Bolão — Admin</div>
     <div class="subtitle">FIFA World Cup 2026</div>
-    <div class="version-tag">Versão: 13/06/2026 às 00:20</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="version-tag" style="margin:0">Versão: 15/06/2026 às 19:30</div>
+      <button onclick="location.reload()" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:5px 12px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer">🔄 Atualizar</button>
+    </div>
     <div class="tabs-main">
       <button class="tab-main active" onclick="switchTab('apostas',event)">🎯 Apostas</button>
       <button class="tab-main" onclick="switchTab('resultados',event)">📋 Resultados</button>
@@ -214,7 +217,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
         </div>
         <div class="filter-bar" id="previewFilterBar" style="display:none;margin-bottom:12px">
           <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Rodada:</label>
-          <select class="filter-select-sm" id="previewFiltroRodada" onchange="onPreviewFiltroRodadaChange()">
+          <select class="filter-select-sm" id="previewFiltroRodada">
             <option value="">Todas</option>
             <option value="1">1ª</option><option value="2">2ª</option><option value="3">3ª</option>
             <option value="16avos">16 avos</option><option value="oitavas">Oitavas</option>
@@ -222,7 +225,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
             <option value="terceiro">3º lugar</option><option value="final">Final</option>
           </select>
           <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Dia:</label>
-          <select class="filter-select-sm" id="previewFiltroDia" onchange="renderPreviewFiltrado()">
+          <select class="filter-select-sm" id="previewFiltroDia">
             <option value="">Todos</option>
           </select>
         </div>
@@ -239,7 +242,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
       <div class="card-title">✏️ Gerenciar Apostas</div>
       <div class="filter-bar">
         <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Rodada:</label>
-        <select class="filter-select-sm" id="gerFiltroRodada" onchange="onGerFiltroRodadaChange()">
+        <select class="filter-select-sm" id="gerFiltroRodada">
           <option value="">Todas</option>
           <option value="1">1ª</option><option value="2">2ª</option><option value="3">3ª</option>
           <option value="16avos">16 avos</option><option value="oitavas">Oitavas</option>
@@ -247,9 +250,9 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
           <option value="terceiro">3º lugar</option><option value="final">Final</option>
         </select>
         <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Dia:</label>
-        <select class="filter-select-sm" id="gerFiltroDia" onchange="renderGerenciar()"><option value="">Todos</option></select>
+        <select class="filter-select-sm" id="gerFiltroDia"><option value="">Todos</option></select>
         <label style="font-size:.8rem;font-weight:700;color:var(--texto-sec)">Participante:</label>
-        <select class="filter-select-sm" id="gerFiltroNome" onchange="renderGerenciar()"><option value="">Todos</option></select>
+        <select class="filter-select-sm" id="gerFiltroNome"><option value="">Todos</option></select>
       </div>
       <div id="gerenciarList"><div class="empty-state"><div class="icon">✏️</div>Nenhuma aposta salva.</div></div>
     </div>
@@ -281,7 +284,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
   <div class="card">
     <div class="card-title">📅 Selecione o jogo</div>
     <div class="section-label">Fase / Rodada</div>
-    <select class="rodada-select" id="rodadaSelectRes" onchange="onRodadaChangeRes()">
+    <select class="rodada-select" id="rodadaSelectRes">
       <option value="">— Selecione a rodada —</option>
       <option value="1">1ª Rodada</option><option value="2">2ª Rodada</option>
       <option value="3">3ª Rodada</option><option value="16avos">16 avos de final</option>
@@ -318,7 +321,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
     </div>
     <div id="exportInner" style="display:none;margin-top:14px">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
-        <select class="filter-select-sm" id="exportFiltro" onchange="filtrarExport()"><option value="">Todos os participantes</option></select>
+        <select class="filter-select-sm" id="exportFiltro"><option value="">Todos os participantes</option></select>
         <button class="copy-btn" id="copyBtn" onclick="copiarTabela()">📋 Copiar tudo</button>
       </div>
       <div style="overflow-x:auto">
@@ -736,6 +739,25 @@ function showMsg(id,type,msg){const el=document.getElementById(id);if(el)el.inne
 // ===================== INIT =====================
 renderCalendario(2026,6);
 // lerDados e listener são iniciados após login bem-sucedido (verificarSenhaAdmin)
+
+// ===================== EVENT LISTENERS =====================
+function addAdminListeners(){
+  const map={
+    'previewFiltroRodada': window.onPreviewFiltroRodadaChange,
+    'previewFiltroDia':    window.renderPreviewFiltrado,
+    'gerFiltroRodada':     window.onGerFiltroRodadaChange,
+    'gerFiltroDia':        renderGerenciar,
+    'gerFiltroNome':       renderGerenciar,
+    'rodadaSelectRes':     window.onRodadaChangeRes,
+    'exportFiltro':        window.filtrarExport,
+  };
+  Object.entries(map).forEach(([id,fn])=>{
+    if(!fn)return;
+    const el=document.getElementById(id);
+    if(el)el.addEventListener('change',fn);
+  });
+}
+addAdminListeners();
 </script>
 </body>
 </html>

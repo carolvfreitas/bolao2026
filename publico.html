@@ -680,9 +680,11 @@ function renderMeusPalpites(){
 
   let jogos=JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&(!filtroR||j.rodada===filtroR)&&(!filtroD||j.data===filtroD)).sort(sortJogo);
 
-  // Filtra por status de palpite
-  if(filtroS==='pendente') jogos=jogos.filter(j=>!(apostas[j.id]||[]).some(a=>a.nome===currentNome));
-  else if(filtroS==='enviado') jogos=jogos.filter(j=>(apostas[j.id]||[]).some(a=>a.nome===currentNome));
+  // Filtra por status de palpite — só aplica se currentNome estiver resolvido
+  if(currentNome&&currentNome!==currentUser?.email){
+    if(filtroS==='pendente') jogos=jogos.filter(j=>!(apostas[j.id]||[]).some(a=>a.nome===currentNome));
+    else if(filtroS==='enviado') jogos=jogos.filter(j=>(apostas[j.id]||[]).some(a=>a.nome===currentNome));
+  }
 
   if(!jogos.length){list.innerHTML=`<div class="empty-state"><div class="icon">✅</div>${filtroS==='pendente'?'Nenhum jogo pendente! Tudo enviado.':'Nenhum jogo para este filtro.'}</div>`;return;}
 
@@ -959,7 +961,6 @@ function addFilterListeners(){
     'filtroRodadaAp':   onFiltroRodadaApChange,
     'filtroDiaAp':      renderJogosApostas,
     'filtroParticipanteAp': renderJogosApostas,
-    'toggleViewBtn':    null, // handled by onclick
   };
   Object.entries(ids).forEach(([id,fn])=>{
     if(!fn)return;
