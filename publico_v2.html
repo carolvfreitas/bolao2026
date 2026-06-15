@@ -326,12 +326,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDNj3eSMLCG3rxxnfX9cZuQbSsxQWjVeH8",
-  authDomain: "bolaocf-2026-5c323.firebaseapp.com",
-  projectId: "bolaocf-2026-5c323",
-  storageBucket: "bolaocf-2026-5c323.firebasestorage.app",
-  messagingSenderId: "1024264290524",
-  appId: "1:1024264290524:web:1492c7baae537fea8f3419"
+  apiKey: "AIzaSyDeKd-GqSnKs33HF-GbXtAJTS0H7OllK2I",
+  authDomain: "bolaotestecvf.firebaseapp.com",
+  projectId: "bolaotestecvf",
+  storageBucket: "bolaotestecvf.firebasestorage.app",
+  messagingSenderId: "169145576792",
+  appId: "1:169145576792:web:20b42cc4820cdc901e092d"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -587,7 +587,7 @@ function iniciarListeners(){
 }
 
 function renderTudo(){
-  renderJogosApostas();
+  onFiltroRodadaApChange(); // atualiza filtro de dia com dados reais
   renderPodio();
   renderResultados();
   renderRanking();
@@ -609,7 +609,9 @@ window.switchSubTab=function(sub,e){
 };
 window.onFiltroRodadaApChange=function(){
   const rodada=document.getElementById('filtroRodadaAp').value;
-  const dias=new Set(JOGOS.filter(j=>!j.mm&&(!rodada||j.rodada===rodada)).map(j=>j.data));
+  const apostas=DADOS?.apostas||{};
+  // Mostra só dias que têm apostas salvas
+  const dias=new Set(JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&apostas[j.id]&&apostas[j.id].length>0&&(!rodada||j.rodada===rodada)).map(j=>j.data));
   const sel=document.getElementById('filtroDiaAp');
   sel.innerHTML='<option value="">Todos</option>'+[...dias].sort().map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
   renderJogosApostas();
