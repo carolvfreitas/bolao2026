@@ -232,7 +232,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
       <div id="subpanel-meus">
         <div class="filter-bar">
           <label>Rodada:</label>
-          <select class="filter-select" id="filtroRodadaMeus" onchange="onFiltroRodadaMeusChange()">
+          <select class="filter-select" id="filtroRodadaMeus" >
             <option value="">Todas</option>
             <option value="1">1ª Rodada</option><option value="2">2ª Rodada</option>
             <option value="3">3ª Rodada</option><option value="16avos">16 avos</option>
@@ -241,11 +241,11 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
             <option value="final">Final</option>
           </select>
           <label>Dia:</label>
-          <select class="filter-select" id="filtroDiaMeus" onchange="renderMeusPalpites()">
+          <select class="filter-select" id="filtroDiaMeus" >
             <option value="">Todos</option>
           </select>
           <label>Palpite:</label>
-          <select class="filter-select" id="filtroStatusMeus" onchange="renderMeusPalpites()">
+          <select class="filter-select" id="filtroStatusMeus" >
             <option value="pendente">Não enviado</option>
             <option value="enviado">Já enviado</option>
             <option value="">Todos os jogos</option>
@@ -258,7 +258,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
       <div id="subpanel-todos" style="display:none">
         <div class="filter-bar">
           <label>Rodada:</label>
-          <select class="filter-select" id="filtroRodadaAp" onchange="onFiltroRodadaApChange()">
+          <select class="filter-select" id="filtroRodadaAp" >
             <option value="">Todas</option>
             <option value="1">1ª Rodada</option><option value="2">2ª Rodada</option>
             <option value="3">3ª Rodada</option><option value="16avos">16 avos</option>
@@ -267,11 +267,11 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
             <option value="final">Final</option>
           </select>
           <label>Dia:</label>
-          <select class="filter-select" id="filtroDiaAp" onchange="renderJogosApostas()">
+          <select class="filter-select" id="filtroDiaAp" >
             <option value="">Todos</option>
           </select>
           <label>Participante:</label>
-          <select class="filter-select" id="filtroParticipanteAp" onchange="renderJogosApostas()">
+          <select class="filter-select" id="filtroParticipanteAp" >
             <option value="">Todos</option>
           </select>
         </div>
@@ -661,11 +661,13 @@ window.switchSubTab=function(sub,e){
 };
 
 // MEUS PALPITES
-window.onFiltroRodadaMeusChange=function(){
+const onFiltroRodadaMeusChange=window.onFiltroRodadaMeusChange=function(){
   const rodada=document.getElementById('filtroRodadaMeus').value;
   const dias=new Set(JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&(!rodada||j.rodada===rodada)).map(j=>j.data));
   const sel=document.getElementById('filtroDiaMeus');
+  const valAtual=sel.value;
   sel.innerHTML='<option value="">Todos</option>'+[...dias].sort().map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
+  if(valAtual&&[...dias].includes(valAtual))sel.value=valAtual;
   renderMeusPalpites();
 };
 function renderMeusPalpites(){
@@ -735,12 +737,14 @@ function renderMeusPalpites(){
 }
 
 // TODOS OS PALPITES — filtros
-window.onFiltroRodadaApChange=function(){
+const onFiltroRodadaApChange=window.onFiltroRodadaApChange=function(){
   const rodada=document.getElementById('filtroRodadaAp').value;
   const apostas=dadosGlobais?.apostas||{};
   const dias=new Set(JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&apostas[j.id]&&apostas[j.id].length>0&&(!rodada||j.rodada===rodada)).map(j=>j.data));
   const sel=document.getElementById('filtroDiaAp');
+  const valAtual=sel.value;
   sel.innerHTML='<option value="">Todos</option>'+[...dias].sort().map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
+  if(valAtual&&[...dias].includes(valAtual))sel.value=valAtual;
   renderJogosApostas();
 };
 window.toggleViewMode=function(){
@@ -946,6 +950,23 @@ function atualizarFooter(exportedAt){
   const txt=`Atualizado em ${d.toLocaleDateString('pt-BR')} às ${d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
   els.forEach(el=>{el.textContent=txt;el.style.display='block';});
 }
+// ===================== EVENT LISTENERS =====================
+function addFilterListeners(){
+  const ids={
+    'filtroRodadaMeus': onFiltroRodadaMeusChange,
+    'filtroDiaMeus':    renderMeusPalpites,
+    'filtroStatusMeus': renderMeusPalpites,
+    'filtroRodadaAp':   onFiltroRodadaApChange,
+    'filtroDiaAp':      renderJogosApostas,
+    'filtroParticipanteAp': renderJogosApostas,
+    'toggleViewBtn':    null, // handled by onclick
+  };
+  Object.entries(ids).forEach(([id,fn])=>{
+    if(!fn)return;
+    const el=document.getElementById(id);
+    if(el)el.addEventListener('change',fn);
+  });
+}
+addFilterListeners();
 </script>
-</body>
 </html>
