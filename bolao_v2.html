@@ -16,6 +16,12 @@
   --texto:#1a1a2e;--texto-sec:#5a6080;
 }
 body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--texto);min-height:100vh}
+.admin-login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.admin-login-box{background:var(--branco);border-radius:16px;border:1px solid var(--cinza-borda);padding:32px 28px;width:100%;max-width:360px;box-shadow:0 4px 24px rgba(0,0,0,.08);text-align:center}
+.admin-login-title{font-family:'Bebas Neue',cursive;font-size:1.8rem;color:var(--azul);letter-spacing:2px;margin-bottom:4px}
+.admin-login-sub{color:var(--texto-sec);font-size:.85rem;margin-bottom:20px}
+.admin-login-box input{width:100%;padding:10px 12px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.95rem;color:var(--texto);margin-bottom:12px}
+.admin-login-box input:focus{outline:none;border-color:var(--azul)}
 .header{background:linear-gradient(135deg,var(--azul) 0%,var(--azul-mid) 60%,var(--verde-dark) 100%);padding:18px 24px 0;position:relative;overflow:hidden}
 .header::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:var(--amarelo);opacity:.08;border-radius:50%}
 .header-inner{position:relative;z-index:1}
@@ -153,7 +159,18 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
 </head>
 <body>
 
-<div id="appScreen">
+<!-- ADMIN LOGIN -->
+<div id="adminLoginScreen" class="admin-login">
+  <div class="admin-login-box">
+    <div class="admin-login-title">🔒 Admin</div>
+    <div class="admin-login-sub">Bolão dos PatiNANAUdores</div>
+    <div id="adminLoginMsg"></div>
+    <input type="password" id="adminSenha" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')verificarSenhaAdmin()">
+    <button class="btn btn-azul" style="width:100%" onclick="verificarSenhaAdmin()">Entrar</button>
+  </div>
+</div>
+
+<div id="appScreen" style="display:none">
 <div class="header">
   <div class="header-inner">
     <div class="title">⚽ Bolão — Admin</div>
@@ -387,19 +404,41 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDNj3eSMLCG3rxxnfX9cZuQbSsxQWjVeH8",
-  authDomain: "bolaocf-2026-5c323.firebaseapp.com",
-  projectId: "bolaocf-2026-5c323",
-  storageBucket: "bolaocf-2026-5c323.firebasestorage.app",
-  messagingSenderId: "1024264290524",
-  appId: "1:1024264290524:web:1492c7baae537fea8f3419"
+  apiKey: "AIzaSyDeKd-GqSnKs33HF-GbXtAJTS0H7OllK2I",
+  authDomain: "bolaotestecvf.firebaseapp.com",
+  projectId: "bolaotestecvf",
+  storageBucket: "bolaotestecvf.firebasestorage.app",
+  messagingSenderId: "169145576792",
+  appId: "1:169145576792:web:20b42cc4820cdc901e092d"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+
+// ===================== ADMIN PASSWORD GATE =====================
+const ADMIN_SENHA = 'ChicoBe!';
+window.verificarSenhaAdmin = async function(){
+  const val = document.getElementById('adminSenha').value;
+  if(val !== ADMIN_SENHA){
+    document.getElementById('adminLoginMsg').innerHTML=`<div style="background:#fde8e8;color:#c0392b;border:1px solid #f5b8b8;padding:8px 12px;border-radius:8px;font-size:.85rem;font-weight:600;margin-bottom:10px">Senha incorreta.</div>`;
+    return;
+  }
+  // Faz login anônimo no Firebase pra ter permissão de leitura/escrita
+  try{
+    await signInAnonymously(auth);
+    document.getElementById('adminLoginScreen').style.display='none';
+    document.getElementById('appScreen').style.display='block';
+    renderCalendario(2026,6);
+    lerDados();
+  }catch(e){
+    document.getElementById('adminLoginMsg').innerHTML=`<div style="background:#fde8e8;color:#c0392b;border:1px solid #f5b8b8;padding:8px 12px;border-radius:8px;font-size:.85rem;font-weight:600;margin-bottom:10px">Erro ao conectar: ${e.message}</div>`;
+  }
+};
 
 // ===================== DADOS =====================
 const PARTICIPANTES_VALIDOS=new Set(['Alice e Paulo','Aloizio Ettinger','Andre Nascimento','Carolina Freitas','Dalila Carvalho','Eduardo Parisi','Eduardo Portugal','Fernando Barbosa','Gabriel Oliveira','Giulia e Rodrigo Thibes','Guilherme Neri','Leonardo Tranzillo','Marcio Balarini','Marcio Souza','Marcos Santiago','Nalditon Leal','Pablo Mazzinghy','Thiago Games','Victor e Marialice Thibes','Vinicius Cruzero']);
@@ -696,7 +735,7 @@ function showMsg(id,type,msg){const el=document.getElementById(id);if(el)el.inne
 
 // ===================== INIT =====================
 renderCalendario(2026,6);
-lerDados();
+// lerDados e listener são iniciados após login bem-sucedido (verificarSenhaAdmin)
 </script>
 </body>
 </html>
