@@ -668,7 +668,7 @@ window.onFiltroRodadaMeusChange=function(){
   sel.innerHTML='<option value="">Todos</option>'+[...dias].sort().map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
   renderMeusPalpites();
 };
-function renderMeusPalpites(){
+window.renderMeusPalpites=function(){
   const filtroR=document.getElementById('filtroRodadaMeus').value;
   const filtroD=document.getElementById('filtroDiaMeus').value;
   const filtroS=document.getElementById('filtroStatusMeus').value;
@@ -709,17 +709,17 @@ function renderMeusPalpites(){
         <div class="placar-input-row">
           <div class="time-input-block">
             <div class="time-input-name">${j.timeA}</div>
-            <input type="number" min="0" max="20" class="gols-input" id="gA_${j.id}" value="${minhaAposta?minhaAposta.gA:0}" ${fechado||res?'disabled':''}>
+            <input type="number" min="0" max="20" class="gols-input" id="gA_${j.id}" value="${minhaAposta?minhaAposta.gA:0}" ${fechado||res||minhaAposta?'disabled':''}>
           </div>
           <span class="vs-mini">×</span>
           <div class="time-input-block">
             <div class="time-input-name">${j.timeB}</div>
-            <input type="number" min="0" max="20" class="gols-input" id="gB_${j.id}" value="${minhaAposta?minhaAposta.gB:0}" ${fechado||res?'disabled':''}>
+            <input type="number" min="0" max="20" class="gols-input" id="gB_${j.id}" value="${minhaAposta?minhaAposta.gB:0}" ${fechado||res||minhaAposta?'disabled':''}>
           </div>
         </div>`;
-    if(!fechado&&!res){
+    if(!fechado&&!res&&!minhaAposta){
       html+=`<button class="btn-salvar-aposta" onclick="salvarAposta('${j.id}','${j.timeA.replace(/'/g,"\\'")}','${j.timeB.replace(/'/g,"\\'")}')">
-        ${minhaAposta?'💾 Atualizar palpite':'💾 Salvar palpite'}
+        💾 Salvar palpite
       </button>`;
     }else if(minhaAposta){
       const r=calcularResultadoAposta(minhaAposta.gA,minhaAposta.gB,res);
@@ -732,7 +732,8 @@ function renderMeusPalpites(){
     html+=`</div></div>`;
   });
   list.innerHTML=html;
-}
+};
+const renderMeusPalpites=window.renderMeusPalpites;
 
 // TODOS OS PALPITES — filtros
 window.onFiltroRodadaApChange=function(){
@@ -749,7 +750,7 @@ window.toggleViewMode=function(){
   renderJogosApostas();
 };
 
-function renderJogosApostas(){
+window.renderJogosApostas=function(){
   const filtroR=document.getElementById('filtroRodadaAp').value;
   const filtroD=document.getElementById('filtroDiaAp').value;
   const filtroP=document.getElementById('filtroParticipanteAp').value;
@@ -763,7 +764,7 @@ function renderJogosApostas(){
   const selVal=sel.value;
   sel.innerHTML='<option value="">Todos</option>'+[...PARTICIPANTES_LISTA].sort((a,b)=>a.localeCompare(b,'pt-BR')).map(n=>`<option value="${n}"${selVal===n?' selected':''}>${n}</option>`).join('');
 
-  const jogos=JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&apostas[j.id]&&apostas[j.id].length>0&&(!filtroR||j.rodada===filtroR)&&(!filtroD||j.data===filtroD)).sort(sortJogo);
+  const jogos=JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&apostas[j.id]&&apostas[j.id].length>0&&(!filtroR||j.rodada===filtroR)&&(!filtroD||j.data===filtroD)&&(!filtroP||(apostas[j.id]||[]).some(a=>a.nome===filtroP))).sort(sortJogo);
   if(!jogos.length){list.innerHTML=`<div class="empty-state"><div class="icon">⚽</div>Nenhum palpite encontrado para os filtros selecionados.</div>`;return;}
 
   if(_viewMode==='jogo'){
@@ -818,7 +819,8 @@ function renderJogosApostas(){
     });
     list.innerHTML=html||`<div class="empty-state"><div class="icon">🔍</div>Nenhum palpite encontrado.</div>`;
   }
-}
+};
+const renderJogosApostas=window.renderJogosApostas;
 
 
 window.salvarAposta=async function(jogoId,timeA,timeB){
