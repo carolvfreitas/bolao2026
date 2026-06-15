@@ -507,7 +507,7 @@ function horaTag(hora,id){
   return hora;
 }
 function sortJogo(a,b){
-  const hs=h=>(!h||h==='')?'99:00':(h==='00:00'||h==='01:00')?'25:'+h:h;
+  const hs=h=>(!h||h==='')?'99:00':(h==='00:00')?'00:00':(h==='01:00')?'25:'+h:h;
   return(a.data+hs(a.hora)).localeCompare(b.data+hs(b.hora));
 }
 function jogoFechado(j){
@@ -919,7 +919,7 @@ function renderRanking(){
   ${ranking.map(([nome,dados],i)=>`<tr><td><span class="rank-pos ${i===0?'ouro':i===1?'prata':i===2?'bronze':''}">${medals[i]||i+1}</span></td>
     <td><div class="tooltip-wrap"><span style="font-weight:700;cursor:pointer;color:var(--azul)">${nome}</span>
       <div class="tooltip-content"><strong style="color:var(--amarelo)">${nome}</strong><br><br>
-        ${dados.detalhes.map(d=>`<div style="margin-bottom:5px"><span style="color:var(--amarelo);font-weight:700">${fmtData(d.data)} — ${d.jogo}</span><br>Palpite: <strong>${d.placar}</strong>${d.resultado?` | Real: ${d.resultado}`:''} <span style="color:${d.pts===3?'#4ade80':d.pts===1?'#fbbf24':'#f87171'};font-weight:700">${d.pts}pt</span> ${d.status}</div>`).join('')}
+        ${dados.detalhes.filter(d=>d.pts>0).sort((a,b)=>{const ja=JOGOS.find(j=>j.timeA+' × '+j.timeB===a.jogo);const jb=JOGOS.find(j=>j.timeA+' × '+j.timeB===b.jogo);const ha=ja?.hora==='00:00'?'00:00':ja?.hora==='01:00'?'25:'+ja.hora:ja?.hora||'99';const hb=jb?.hora==='00:00'?'00:00':jb?.hora==='01:00'?'25:'+jb.hora:jb?.hora||'99';return(a.data+ha).localeCompare(b.data+hb);}).map(d=>`<div style="margin-bottom:5px"><span style="color:var(--amarelo);font-weight:700">${fmtData(d.data)} — ${d.jogo}</span><br>Palpite: <strong>${d.placar}</strong> | Real: ${d.resultado} <span style="color:${d.pts===3?'#4ade80':'#fbbf24'};font-weight:700">${d.pts}pt</span> ${d.status}</div>`).join('')}
       </div></div></td>
     <td><span class="pts-badge">${dados.pontos}</span></td>
     <td style="text-align:center;font-weight:700;color:var(--verde-dark)">${dados.exatos}</td>
