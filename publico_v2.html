@@ -624,7 +624,7 @@ window.switchSubTab=function(sub,e){
 };
 window.onFiltroRodadaApChange=function(){
   const rodada=document.getElementById('filtroRodadaAp').value;
-  const apostas=DADOS?.apostas||{};
+  const apostas=dadosGlobais?.apostas||{};
   // Mostra só dias que têm apostas salvas
   const dias=new Set(JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&apostas[j.id]&&apostas[j.id].length>0&&(!rodada||j.rodada===rodada)).map(j=>j.data));
   const sel=document.getElementById('filtroDiaAp');
