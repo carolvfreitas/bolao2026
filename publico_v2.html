@@ -223,11 +223,39 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
     <!-- ABA APOSTAS -->
     <div id="panel-apostas" class="tab-panel active">
       <div class="subtabs">
-        <button class="subtab active" onclick="switchSubTab('meus',event)">⚽ Jogos</button>
+        <button class="subtab active" onclick="switchSubTab('meus',event)">🎯 Meus Palpites</button>
+        <button class="subtab" onclick="switchSubTab('todos',event)">👥 Todos os Palpites</button>
         <button class="subtab" onclick="switchSubTab('podio-pub',event)">🏆 Pódio</button>
       </div>
-      <!-- JOGOS -->
+
+      <!-- MEUS PALPITES -->
       <div id="subpanel-meus">
+        <div class="filter-bar">
+          <label>Rodada:</label>
+          <select class="filter-select" id="filtroRodadaMeus" onchange="onFiltroRodadaMeusChange()">
+            <option value="">Todas</option>
+            <option value="1">1ª Rodada</option><option value="2">2ª Rodada</option>
+            <option value="3">3ª Rodada</option><option value="16avos">16 avos</option>
+            <option value="oitavas">Oitavas</option><option value="quartas">Quartas</option>
+            <option value="semis">Semis</option><option value="terceiro">3º lugar</option>
+            <option value="final">Final</option>
+          </select>
+          <label>Dia:</label>
+          <select class="filter-select" id="filtroDiaMeus" onchange="renderMeusPalpites()">
+            <option value="">Todos</option>
+          </select>
+          <label>Palpite:</label>
+          <select class="filter-select" id="filtroStatusMeus" onchange="renderMeusPalpites()">
+            <option value="pendente">Não enviado</option>
+            <option value="enviado">Já enviado</option>
+            <option value="">Todos os jogos</option>
+          </select>
+        </div>
+        <div id="meusPalpitesList"></div>
+      </div>
+
+      <!-- TODOS OS PALPITES -->
+      <div id="subpanel-todos" style="display:none">
         <div class="filter-bar">
           <label>Rodada:</label>
           <select class="filter-select" id="filtroRodadaAp" onchange="onFiltroRodadaApChange()">
@@ -242,13 +270,17 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
           <select class="filter-select" id="filtroDiaAp" onchange="renderJogosApostas()">
             <option value="">Todos</option>
           </select>
+          <label>Participante:</label>
+          <select class="filter-select" id="filtroParticipanteAp" onchange="renderJogosApostas()">
+            <option value="">Todos</option>
+          </select>
         </div>
-        <div id="viewToggleBar" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <span style="font-size:.78rem;color:var(--texto-sec);font-weight:600">Ver palpites de todos:</span>
+        <div style="display:flex;align-items:center;justify-content:flex-end;margin-bottom:10px">
           <button id="toggleViewBtn" onclick="toggleViewMode()" style="padding:5px 12px;border:1.5px solid var(--azul);background:var(--branco);color:var(--azul);border-radius:20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer">👤 Por pessoa</button>
         </div>
         <div id="jogosApostasList"></div>
       </div>
+
       <!-- PÓDIO -->
       <div id="subpanel-podio-pub" style="display:none">
         <div class="card">
@@ -578,6 +610,7 @@ onAuthStateChanged(auth,async user=>{
 
   // Escuta dados em tempo real
   iniciarListeners();
+  onFiltroRodadaMeusChange();
   onFiltroRodadaApChange();
 });
 
@@ -602,7 +635,8 @@ function iniciarListeners(){
 }
 
 function renderTudo(){
-  onFiltroRodadaApChange(); // atualiza filtro de dia com dados reais
+  onFiltroRodadaMeusChange();
+  onFiltroRodadaApChange();
   renderPodio();
   renderResultados();
   renderRanking();
@@ -620,12 +654,90 @@ window.switchSubTab=function(sub,e){
   document.querySelectorAll('#panel-apostas .subtab').forEach(t=>t.classList.remove('active'));
   if(e&&e.target)e.target.classList.add('active');
   document.getElementById('subpanel-meus').style.display=sub==='meus'?'block':'none';
+  document.getElementById('subpanel-todos').style.display=sub==='todos'?'block':'none';
   document.getElementById('subpanel-podio-pub').style.display=sub==='podio-pub'?'block':'none';
+  if(sub==='meus')renderMeusPalpites();
+  if(sub==='todos')renderJogosApostas();
 };
+
+// MEUS PALPITES
+window.onFiltroRodadaMeusChange=function(){
+  const rodada=document.getElementById('filtroRodadaMeus').value;
+  const dias=new Set(JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&(!rodada||j.rodada===rodada)).map(j=>j.data));
+  const sel=document.getElementById('filtroDiaMeus');
+  sel.innerHTML='<option value="">Todos</option>'+[...dias].sort().map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
+  renderMeusPalpites();
+};
+function renderMeusPalpites(){
+  const filtroR=document.getElementById('filtroRodadaMeus').value;
+  const filtroD=document.getElementById('filtroDiaMeus').value;
+  const filtroS=document.getElementById('filtroStatusMeus').value;
+  const list=document.getElementById('meusPalpitesList');
+  const agora=new Date();
+  const apostas=dadosGlobais.apostas||{};
+
+  let jogos=JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&(!filtroR||j.rodada===filtroR)&&(!filtroD||j.data===filtroD)).sort(sortJogo);
+
+  // Filtra por status de palpite
+  if(filtroS==='pendente') jogos=jogos.filter(j=>!(apostas[j.id]||[]).some(a=>a.nome===currentNome));
+  else if(filtroS==='enviado') jogos=jogos.filter(j=>(apostas[j.id]||[]).some(a=>a.nome===currentNome));
+
+  if(!jogos.length){list.innerHTML=`<div class="empty-state"><div class="icon">✅</div>${filtroS==='pendente'?'Nenhum jogo pendente! Tudo enviado.':'Nenhum jogo para este filtro.'}</div>`;return;}
+
+  let html='';
+  jogos.forEach(j=>{
+    const apostasJogo=apostas[j.id]||[];
+    const minhaAposta=apostasJogo.find(a=>a.nome===currentNome);
+    const res=dadosGlobais.resultados[j.id];
+    const fechado=jogoFechado(j);
+    const resTag=res?`<span style="font-size:.75rem;font-weight:800;color:var(--verde-dark);margin-left:6px">Resultado: ${res.gA}—${res.gB}</span>`:'';
+
+    let statusBadge='';
+    if(res)statusBadge=`<span class="jogo-status-badge fechado">🔒 Encerrado</span>`;
+    else if(fechado)statusBadge=`<span class="jogo-status-badge fechado">🔒 Fechado</span>`;
+    else if(j.hora&&(new Date(`${j.data}T${j.hora}:00-03:00`)-agora)<3600000)statusBadge=`<span class="jogo-status-badge breve">⏰ Fecha em breve</span>`;
+    else statusBadge=`<span class="jogo-status-badge aberto">✅ Aberto</span>`;
+
+    html+=`<div class="jogo-card">
+      <div class="jogo-card-header">
+        <div class="jogo-times">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}${resTag}</div>
+        <div class="jogo-meta">${fmtData(j.data)} · ${horaTag(j.hora,j.id)} · Grupo ${j.grupo} · ${j.local}</div>
+        ${statusBadge}
+      </div>
+      <div class="minha-aposta-wrap">
+        <div class="minha-aposta-label">Meu palpite</div>
+        <div class="placar-input-row">
+          <div class="time-input-block">
+            <div class="time-input-name">${j.timeA}</div>
+            <input type="number" min="0" max="20" class="gols-input" id="gA_${j.id}" value="${minhaAposta?minhaAposta.gA:0}" ${fechado||res?'disabled':''}>
+          </div>
+          <span class="vs-mini">×</span>
+          <div class="time-input-block">
+            <div class="time-input-name">${j.timeB}</div>
+            <input type="number" min="0" max="20" class="gols-input" id="gB_${j.id}" value="${minhaAposta?minhaAposta.gB:0}" ${fechado||res?'disabled':''}>
+          </div>
+        </div>`;
+    if(!fechado&&!res){
+      html+=`<button class="btn-salvar-aposta" onclick="salvarAposta('${j.id}','${j.timeA.replace(/'/g,"\\'")}','${j.timeB.replace(/'/g,"\\'")}')">
+        ${minhaAposta?'💾 Atualizar palpite':'💾 Salvar palpite'}
+      </button>`;
+    }else if(minhaAposta){
+      const r=calcularResultadoAposta(minhaAposta.gA,minhaAposta.gB,res);
+      const badge=r.icon?`<span style="font-size:1.1rem;margin-left:4px">${r.icon}</span>`:'';
+      const pts=r.pts!==null?`<span style="font-size:.75rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'};margin-left:4px">${r.pts}pt</span>`:'';
+      html+=`<div style="text-align:center;font-size:.78rem;color:var(--texto-sec);margin-top:8px">Palpite salvo${badge}${pts}</div>`;
+    }else if(fechado&&!minhaAposta){
+      html+=`<div style="text-align:center;font-size:.78rem;color:#c0392b;font-weight:700;margin-top:8px">Sem aposta — 0pt</div>`;
+    }
+    html+=`</div></div>`;
+  });
+  list.innerHTML=html;
+}
+
+// TODOS OS PALPITES — filtros
 window.onFiltroRodadaApChange=function(){
   const rodada=document.getElementById('filtroRodadaAp').value;
   const apostas=dadosGlobais?.apostas||{};
-  // Mostra só dias que têm apostas salvas
   const dias=new Set(JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&apostas[j.id]&&apostas[j.id].length>0&&(!rodada||j.rodada===rodada)).map(j=>j.data));
   const sel=document.getElementById('filtroDiaAp');
   sel.innerHTML='<option value="">Todos</option>'+[...dias].sort().map(d=>`<option value="${d}">${fmtData(d)}</option>`).join('');
@@ -640,106 +752,74 @@ window.toggleViewMode=function(){
 function renderJogosApostas(){
   const filtroR=document.getElementById('filtroRodadaAp').value;
   const filtroD=document.getElementById('filtroDiaAp').value;
+  const filtroP=document.getElementById('filtroParticipanteAp').value;
   const list=document.getElementById('jogosApostasList');
   const agora=new Date();
+  const apostas=dadosGlobais.apostas||{};
 
-  const jogos=JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&(!filtroR||j.rodada===filtroR)&&(!filtroD||j.data===filtroD)).sort(sortJogo);
+  // Popula filtro de participante
+  const nomes=new Set();Object.values(apostas).forEach(aps=>aps.forEach(a=>nomes.add(a.nome)));
+  const sel=document.getElementById('filtroParticipanteAp');
+  const selVal=sel.value;
+  sel.innerHTML='<option value="">Todos</option>'+[...PARTICIPANTES_LISTA].sort((a,b)=>a.localeCompare(b,'pt-BR')).map(n=>`<option value="${n}"${selVal===n?' selected':''}>${n}</option>`).join('');
 
-  if(!jogos.length){list.innerHTML=`<div class="empty-state"><div class="icon">⚽</div>Nenhum jogo para este filtro.</div>`;return;}
+  const jogos=JOGOS.filter(j=>!j.mm&&j.timeA&&j.timeB&&apostas[j.id]&&apostas[j.id].length>0&&(!filtroR||j.rodada===filtroR)&&(!filtroD||j.data===filtroD)).sort(sortJogo);
+  if(!jogos.length){list.innerHTML=`<div class="empty-state"><div class="icon">⚽</div>Nenhum palpite encontrado para os filtros selecionados.</div>`;return;}
 
   if(_viewMode==='jogo'){
     let html='';
     jogos.forEach(j=>{
-      const apostas=dadosGlobais.apostas[j.id]||[];
-      const apostasMap={};apostas.forEach(a=>{apostasMap[a.nome]=a;});
-      const minhaAposta=apostasMap[currentNome];
+      const apostasJogo=apostas[j.id]||[];
+      const apostasMap={};apostasJogo.forEach(a=>{apostasMap[a.nome]=a;});
       const res=dadosGlobais.resultados[j.id];
-      const fechado=jogoFechado(j);
-      const apos12=jogoApos12h(j);
       const resTag=res?`<span style="font-size:.75rem;font-weight:800;color:var(--verde-dark);margin-left:6px">Resultado: ${res.gA}—${res.gB}</span>`:'';
-
-      let statusBadge='';
-      if(res){statusBadge=`<span class="jogo-status-badge fechado">🔒 Encerrado</span>`;}
-      else if(fechado){statusBadge=`<span class="jogo-status-badge fechado">🔒 Fechado</span>`;}
-      else if((new Date(`${j.data}T${j.hora}:00-03:00`)-agora)<3600000){statusBadge=`<span class="jogo-status-badge breve">⏰ Fecha em breve</span>`;}
-      else{statusBadge=`<span class="jogo-status-badge aberto">✅ Aberto</span>`;}
-
+      const apos12=jogoApos12h(j);
+      const listaFiltrada=filtroP?[filtroP]:[...PARTICIPANTES_LISTA].sort((a,b)=>a.localeCompare(b,'pt-BR'));
       html+=`<div class="jogo-card">
         <div class="jogo-card-header">
           <div class="jogo-times">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}${resTag}</div>
           <div class="jogo-meta">${fmtData(j.data)} · ${horaTag(j.hora,j.id)} · Grupo ${j.grupo} · ${j.local}</div>
-          ${statusBadge}
-        </div>`;
-
-      // MINHA APOSTA
-      html+=`<div class="minha-aposta-wrap">
-        <div class="minha-aposta-label">Meu palpite</div>
-        <div class="placar-input-row">
-          <div class="time-input-block">
-            <div class="time-input-name">${j.timeA}</div>
-            <input type="number" min="0" max="20" class="gols-input" id="gA_${j.id}" value="${minhaAposta?minhaAposta.gA:0}" ${fechado||res?'disabled':''}>
-          </div>
-          <span class="vs-mini">×</span>
-          <div class="time-input-block">
-            <div class="time-input-name">${j.timeB}</div>
-            <input type="number" min="0" max="20" class="gols-input" id="gB_${j.id}" value="${minhaAposta?minhaAposta.gB:0}" ${fechado||res?'disabled':''}>
-          </div>
-        </div>`;
-      if(!fechado&&!res){
-        html+=`<button class="btn-salvar-aposta" onclick="salvarAposta('${j.id}','${j.timeA.replace(/'/g,"\\'")}','${j.timeB.replace(/'/g,"\\'")}')">
-          ${minhaAposta?'💾 Atualizar palpite':'💾 Salvar palpite'}
-        </button>`;
-      }else if(minhaAposta){
-        const r=calcularResultadoAposta(minhaAposta.gA,minhaAposta.gB,res);
-        const badge=r.icon?`<span style="font-size:1.1rem;margin-left:4px">${r.icon}</span>`:'';
-        const pts=r.pts!==null?`<span style="font-size:.75rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'};margin-left:4px">${r.pts}pt</span>`:'';
-        html+=`<div style="text-align:center;font-size:.78rem;color:var(--texto-sec);margin-top:8px">Palpite salvo${badge}${pts}</div>`;
-      }
-      html+=`</div>`;
-
-      // APOSTAS DE TODOS
-      html+=`<div class="apostas-rows" style="margin-top:10px">`;
-      [...PARTICIPANTES_LISTA].sort((a,b)=>a.localeCompare(b,'pt-BR')).forEach(nome=>{
-        const a=apostasMap[nome];
-        if(a){
-          const r=calcularResultadoAposta(a.gA,a.gB,res);
-          const badge=r.icon&&res?`<span style="font-size:.9rem">${r.icon}</span>`:'';
-          const pts=r.pts!==null&&res?`<span style="font-size:.7rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'}">${r.pts}pt</span>`:'';
-          const destaque=nome===currentNome?'border-color:var(--azul);background:var(--azul-light)':'';
-          html+=`<div class="aposta-row" style="${destaque}"><span class="aposta-nome">${nome===currentNome?'<strong>'+nome+'</strong>':nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span>${pts} ${badge}</div>`;
-        }else if(apos12){
-          html+=`<div class="aposta-row"><span class="aposta-nome">${nome}</span><span style="font-size:.75rem;color:#c0392b;font-weight:700">Sem aposta — 0pt</span></div>`;
-        }else{
-          html+=`<div class="aposta-row"><span class="aposta-nome">${nome}</span><span style="font-size:.75rem;color:var(--texto-sec);font-style:italic">Aposta pendente</span></div>`;
-        }
-      });
-      html+=`</div></div>`;
+        </div>
+        <div class="apostas-rows">${listaFiltrada.map(nome=>{
+          const a=apostasMap[nome];
+          if(a){
+            const r=calcularResultadoAposta(a.gA,a.gB,res);
+            const badge=r.icon&&res?`<span style="font-size:.9rem">${r.icon}</span>`:'';
+            const pts=r.pts!==null&&res?`<span style="font-size:.7rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'}">${r.pts}pt</span>`:'';
+            const destaque=nome===currentNome?'border-color:var(--azul);background:var(--azul-light)':'';
+            return`<div class="aposta-row" style="${destaque}"><span class="aposta-nome">${nome===currentNome?'<strong>'+nome+'</strong>':nome}</span><span class="aposta-placar">${a.gA} × ${a.gB}</span>${pts} ${badge}</div>`;
+          }else if(apos12){
+            return`<div class="aposta-row"><span class="aposta-nome">${nome}</span><span style="font-size:.75rem;color:#c0392b;font-weight:700">Sem aposta — 0pt</span></div>`;
+          }else{
+            return`<div class="aposta-row"><span class="aposta-nome">${nome}</span><span style="font-size:.75rem;color:var(--texto-sec);font-style:italic">Aposta pendente</span></div>`;
+          }
+        }).join('')}</div>
+      </div>`;
     });
     list.innerHTML=html;
   } else {
     // Vista por pessoa
     let html='';
-    [...PARTICIPANTES_LISTA].sort((a,b)=>a.localeCompare(b,'pt-BR')).forEach(nome=>{
+    const nomesFiltrados=filtroP?[filtroP]:[...PARTICIPANTES_LISTA].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+    nomesFiltrados.forEach(nome=>{
       html+=`<div class="jogo-card"><div class="jogo-card-header"><div class="jogo-times">👤 ${nome===currentNome?'<strong>'+nome+' (você)</strong>':nome}</div></div><div class="apostas-rows">`;
       jogos.forEach(j=>{
-        const apostas=dadosGlobais.apostas[j.id]||[];
-        const ap=apostas.find(a=>a.nome===nome);
+        const ap=(apostas[j.id]||[]).find(a=>a.nome===nome);
         const res=dadosGlobais.resultados[j.id];
         const apos12=jogoApos12h(j);
         const r=ap?calcularResultadoAposta(ap.gA,ap.gB,res):{icon:'',pts:null};
         const badge=r.icon&&res?`<span style="font-size:.9rem">${r.icon}</span>`:'';
-        const pts=r.pts!==null&&res?`<span style="font-size:.7rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'}">${r.pts}pt</span>`:'';
-        const resTag=res?`<span style="font-size:.7rem;color:var(--texto-sec)"> Real: ${res.gA}—${res.gB}</span>`:'';
-        const placarCol=ap?`<span class="aposta-placar">${ap.gA} × ${ap.gB}</span>${resTag} ${pts}${badge}`
-          :(apos12?`<span style="font-size:.75rem;color:#c0392b;font-weight:700">Sem aposta</span>`
-                  :`<span style="font-size:.75rem;color:var(--texto-sec);font-style:italic">Pendente</span>`);
+        const pts=r.pts!==null&&res?`<span style="font-size:.7rem;font-weight:700;color:${r.pts===3?'var(--verde-dark)':r.pts===1?'#c9b000':'#c0392b'};margin-right:4px">${r.pts}pt</span>`:'';
+        const resTag=res?`<span style="font-size:.7rem;color:var(--texto-sec)">Real: ${res.gA}—${res.gB}</span>`:'';
+        const placarCol=ap?`<span class="aposta-placar">${ap.gA} × ${ap.gB}</span>${resTag} ${pts}${badge}`:(apos12?`<span style="font-size:.75rem;color:#c0392b;font-weight:700">Sem aposta</span>`:`<span style="font-size:.75rem;color:var(--texto-sec);font-style:italic">Pendente</span>`);
         html+=`<div class="aposta-row"><div style="flex:1"><div style="font-weight:700;font-size:.85rem">${getFlag(j.timeA)} ${j.timeA} × ${j.timeB} ${getFlag(j.timeB)}</div><div style="font-size:.7rem;color:var(--texto-sec);margin-top:1px">${fmtData(j.data)} · Grupo ${j.grupo}</div></div>${placarCol}</div>`;
       });
       html+=`</div></div>`;
     });
-    list.innerHTML=html;
+    list.innerHTML=html||`<div class="empty-state"><div class="icon">🔍</div>Nenhum palpite encontrado.</div>`;
   }
 }
+
 
 window.salvarAposta=async function(jogoId,timeA,timeB){
   if(!currentNome||currentNome===currentUser.email){
