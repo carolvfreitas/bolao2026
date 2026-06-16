@@ -199,6 +199,17 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
   </div>
 </div>
 
+<!-- AGUARDANDO APROVAÇÃO -->
+<div id="pendingScreen" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:24px;background:var(--cinza-bg)">
+  <div style="background:var(--branco);border-radius:16px;border:1px solid var(--cinza-borda);padding:32px 28px;width:100%;max-width:400px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)">
+    <div style="font-size:3rem;margin-bottom:12px">⏳</div>
+    <div style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:var(--azul);letter-spacing:2px;margin-bottom:8px">Aguardando aprovação</div>
+    <p style="color:var(--texto-sec);font-size:.9rem;line-height:1.6;margin-bottom:20px">Sua conta foi criada com sucesso! Aguarde o administrador vincular seu e-mail ao bolão.<br><br>Isso normalmente leva alguns minutos. Tente novamente em breve.</p>
+    <button onclick="location.reload()" style="padding:10px 24px;background:var(--azul);color:#fff;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.9rem;cursor:pointer;margin-bottom:12px;width:100%">🔄 Tentar novamente</button>
+    <button onclick="fazerLogout()" style="padding:10px 24px;background:none;color:var(--texto-sec);border:1px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;width:100%">Sair</button>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="appScreen" style="display:none">
   <div class="header">
@@ -575,6 +586,7 @@ window.criarConta=async function(){
 };
 window.fazerLogout=async function(){
   if(_unsubscribe)_unsubscribe();
+  document.getElementById('pendingScreen').style.display='none';
   await signOut(auth);
 };
 function showLoginMsg(msg,tipo){
@@ -614,6 +626,13 @@ onAuthStateChanged(auth,async user=>{
 
   currentNome=perfilNome||user.email;
   document.getElementById('userNameDisplay').textContent=currentNome;
+
+  // Se o nome ainda é o email, significa que não foi vinculado — bloqueia acesso
+  if(currentNome===user.email){
+    document.getElementById('loadingScreen').style.display='none';
+    document.getElementById('pendingScreen').style.display='flex';
+    return;
+  }
 
   // Só mostra o app quando tudo estiver pronto
   document.getElementById('loadingScreen').style.display='none';
