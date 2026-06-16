@@ -478,7 +478,7 @@ function isMCValue(v){const n=norm(v||'');return n===''||MC_KEYWORDS.some(k=>n.i
 function fmtData(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}`;}
 function isMadrugada(h){return h==='00:00'||h==='01:00';}
 function horaTag(hora,id){if(!hora)return'—';if(isMadrugada(hora)){const ds=id?MADRUGADA_DIA_SEGUINTE[id]:null;return ds?`${hora} 🌙 (madrugada de ${ds})`:`${hora} 🌙`;}return hora;}
-function sortJogo(a,b){const hs=h=>(!h||h==='')?'99:00':(h==='00:00')?'00:00':(h==='01:00')?'25:'+h:h;return(a.data+hs(a.hora)).localeCompare(b.data+hs(b.hora));}
+function sortJogo(a,b){const hs=h=>(!h||h==='')?'99:00':(h==='00:00'||h==='01:00')?'00:'+h:h;return(a.data+hs(a.hora)).localeCompare(b.data+hs(b.hora));}
 function calcularResultadoAposta(gA,gB,res){if(!res)return{icon:'',pts:null};if(gA===res.gA&&gB===res.gB)return{icon:'✅',pts:3,label:'Placar exato'};const vP=gA>gB?'A':gA<gB?'B':'E',vR=res.gA>res.gB?'A':res.gA<res.gB?'B':'E';if(vP===vR)return{icon:'🟡',pts:1,label:'Acertou o vencedor'};return{icon:'❌',pts:0,label:'Errou'};}
 
 // ===================== FIRESTORE =====================

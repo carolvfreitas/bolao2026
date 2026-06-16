@@ -507,7 +507,7 @@ function horaTag(hora,id){
   return hora;
 }
 function sortJogo(a,b){
-  const hs=h=>(!h||h==='')?'99:00':(h==='00:00')?'00:00':(h==='01:00')?'25:'+h:h;
+  const hs=h=>(!h||h==='')?'99:00':(h==='00:00'||h==='01:00')?'00:'+h:h;
   return(a.data+hs(a.hora)).localeCompare(b.data+hs(b.hora));
 }
 function jogoFechado(j){
