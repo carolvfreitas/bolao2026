@@ -399,7 +399,7 @@ const JOGOS=[
   {id:"M17",data:"2026-06-16",hora:"22:00",timeA:"Argentina",timeB:"Argélia",rodada:"1",grupo:"J",local:"Kansas City"},
   {id:"M18",data:"2026-06-16",hora:"16:00",timeA:"França",timeB:"Senegal",rodada:"1",grupo:"I",local:"Nova York/NJ"},
   {id:"M19",data:"2026-06-16",hora:"19:00",timeA:"Iraque",timeB:"Noruega",rodada:"1",grupo:"I",local:"Boston"},
-  {id:"M20",data:"2026-06-16",hora:"01:00",timeA:"Áustria",timeB:"Jordânia",rodada:"1",grupo:"J",local:"San Francisco"},
+  {id:"M20",data:"2026-06-17",hora:"01:00",timeA:"Áustria",timeB:"Jordânia",rodada:"1",grupo:"J",local:"San Francisco"},
   {id:"M21",data:"2026-06-17",hora:"14:00",timeA:"Portugal",timeB:"RD Congo",rodada:"1",grupo:"K",local:"Houston"},
   {id:"M22",data:"2026-06-17",hora:"17:00",timeA:"Inglaterra",timeB:"Croácia",rodada:"1",grupo:"L",local:"Dallas"},
   {id:"M23",data:"2026-06-17",hora:"20:00",timeA:"Gana",timeB:"Panamá",rodada:"1",grupo:"L",local:"Toronto"},
@@ -583,15 +583,19 @@ function showLoginMsg(msg,tipo){
 
 // ===================== INIT COM AUTH =====================
 onAuthStateChanged(auth,async user=>{
-  document.getElementById('loadingScreen').style.display='none';
   if(!user){
+    document.getElementById('loadingScreen').style.display='none';
     document.getElementById('appScreen').style.display='none';
     document.getElementById('loginScreen').style.display='flex';
     currentUser=null;currentNome=null;
     return;
   }
-  currentUser=user;
+  // Usuário já logado — mantém tela de loading enquanto busca perfil
+  document.getElementById('loadingScreen').style.display='flex';
   document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appScreen').style.display='none';
+
+  currentUser=user;
 
   // Busca nome por UID primeiro, depois por email
   let perfilNome=null;
@@ -600,21 +604,21 @@ onAuthStateChanged(auth,async user=>{
     if(perfilPorUid.exists()&&perfilPorUid.data().nome){
       perfilNome=perfilPorUid.data().nome;
     } else {
-      // Busca por email na coleção usuarios
       const snap=await getDocs(collection(db,'usuarios'));
       snap.forEach(d=>{if(d.data().email===user.email&&d.data().nome)perfilNome=d.data().nome;});
       if(perfilNome){
-        // Salva com UID correto para próximos logins
         await setDoc(doc(db,'usuarios',user.uid),{email:user.email,nome:perfilNome},{merge:true});
       }
     }
   }catch(e){console.warn('Erro ao buscar perfil:',e.message);}
+
   currentNome=perfilNome||user.email;
-  console.log('currentNome:', currentNome);
   document.getElementById('userNameDisplay').textContent=currentNome;
+
+  // Só mostra o app quando tudo estiver pronto
+  document.getElementById('loadingScreen').style.display='none';
   document.getElementById('appScreen').style.display='block';
 
-  // Escuta dados em tempo real
   iniciarListeners();
   onFiltroRodadaMeusChange();
   onFiltroRodadaApChange();
