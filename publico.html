@@ -946,60 +946,46 @@ window.toggleRodada=function(el){el.classList.toggle('collapsed');el.nextElement
 // ===================== RANKING =====================
 function calcularPontos(){
   const ps={};
-  // Processa jogos em ordem cronológica para critério de desempate "chegou primeiro"
-  const jogosOrdenados=Object.keys(state.apostas).map(jid=>JOGOS.find(j=>j.id===jid)).filter(Boolean).sort(sortJogo);
-  jogosOrdenados.forEach(jogo=>{
-    const jid=jogo.id;const res=state.resultados[jid];
-    state.apostas[jid].forEach(ap=>{
-      if(!ps[ap.nome])ps[ap.nome]={pontos:0,exatos:0,detalhes:[],jogoPrimeiroPonto:null,jogoprimeiroExato:null};
+  // Ordena jogos cronologicamente para critério "chegou primeiro"
+  const jidsOrdenados=Object.keys(dadosGlobais.apostas).map(jid=>{
+    const j=JOGOS.find(x=>x.id===jid);
+    return j?{jid,jogo:j}:null;
+  }).filter(Boolean).sort((a,b)=>sortJogo(a.jogo,b.jogo));
+
+  jidsOrdenados.forEach(({jid,jogo})=>{
+    const res=dadosGlobais.resultados[jid];
+    dadosGlobais.apostas[jid].forEach(ap=>{
+      if(!ps[ap.nome])ps[ap.nome]={pontos:0,exatos:0,detalhes:[],_ptsCron:[],_exCron:[]};
       const p=ps[ap.nome];
-      if(!res){p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,pts:0,status:'Aguardando resultado'});return;}
+      if(!res){
+        p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,pts:0,status:'Aguardando resultado'});
+        return;
+      }
       let pts=0,status='Errou';
       if(ap.gA===res.gA&&ap.gB===res.gB){pts=3;status='Placar exato';p.exatos++;}
       else{const vP=ap.gA>ap.gB?'A':ap.gA<ap.gB?'B':'E',vR=res.gA>res.gB?'A':res.gA<res.gB?'B':'E';if(vP===vR){pts=1;status='Acertou o vencedor';}}
       p.pontos+=pts;
+      // Guarda acumulado cronológico para desempate
+      p._ptsCron.push(p.pontos);
+      if(pts===3)p._exCron.push(p.exatos);
       p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,resultado:`${res.gA}×${res.gB}`,pts,status});
     });
   });
-  // Calcula acumulados cronológicos para desempate "chegou primeiro"
-  // Para cada participante, guarda o "jogo-chave" (índice cronológico) em que atingiu seu total de pontos/exatos
-  const ranking=Object.entries(ps);
-  ranking.forEach(([nome,dados])=>{
-    // Ordena detalhes cronologicamente
-    const det=[...dados.detalhes].sort((a,b)=>{
-      const ja=JOGOS.find(j=>j.timeA+' × '+j.timeB===a.jogo||j.timeB+' × '+j.timeA===a.jogo);
-      const jb=JOGOS.find(j=>j.timeA+' × '+j.timeB===b.jogo||j.timeB+' × '+j.timeA===b.jogo);
-      return sortJogo(ja||{data:'9999',hora:''},jb||{data:'9999',hora:''});
-    });
-    // "Chegou primeiro em X pontos" = índice do último jogo necessário para atingir X pontos
-    let acc=0,accE=0;
-    dados.primeiroPontoIdx='9999-99:99-Z'; // default: nunca chegou
-    dados.primeiroExatoIdx='9999-99:99-Z';
-    det.forEach(d=>{
-      if(d.pts>0){
-        acc+=d.pts;
-        if(acc>=dados.pontos&&dados.primeiroPontoIdx==='9999-99:99-Z'){
-          const jg=JOGOS.find(j=>j.timeA+' × '+j.timeB===d.jogo||j.timeB+' × '+j.timeA===d.jogo);
-          const hs=jg?.hora==='00:00'||jg?.hora==='01:00'?'00:'+jg.hora:jg?.hora||'99';
-          dados.primeiroPontoIdx=(d.data||'9999')+hs+d.jogo;
-        }
-      }
-      if(d.pts===3){
-        accE++;
-        if(accE>=dados.exatos&&dados.primeiroExatoIdx==='9999-99:99-Z'){
-          const jg=JOGOS.find(j=>j.timeA+' × '+j.timeB===d.jogo||j.timeB+' × '+j.timeA===d.jogo);
-          const hs=jg?.hora==='00:00'||jg?.hora==='01:00'?'00:'+jg.hora:jg?.hora||'99';
-          dados.primeiroExatoIdx=(d.data||'9999')+hs+d.jogo;
-        }
-      }
-    });
+
+  return Object.entries(ps).sort((a,b)=>{
+    // 1. Mais pontos
+    if(b[1].pontos!==a[1].pontos)return b[1].pontos-a[1].pontos;
+    // 2. Mais exatos
+    if(b[1].exatos!==a[1].exatos)return b[1].exatos-a[1].exatos;
+    // 3. Quem chegou na mesma pontuação primeiro (menor número de jogos necessários)
+    const ptA=a[1]._ptsCron.findIndex(v=>v>=a[1].pontos);
+    const ptB=b[1]._ptsCron.findIndex(v=>v>=b[1].pontos);
+    if(ptA!==ptB)return ptA-ptB;
+    // 4. Quem chegou no mesmo número de exatos primeiro
+    const exA=a[1]._exCron.findIndex(v=>v>=a[1].exatos);
+    const exB=b[1]._exCron.findIndex(v=>v>=b[1].exatos);
+    return exA-exB;
   });
-  return ranking.sort((a,b)=>
-    (b[1].pontos-a[1].pontos)||
-    (b[1].exatos-a[1].exatos)||
-    a[1].primeiroPontoIdx.localeCompare(b[1].primeiroPontoIdx)||
-    a[1].primeiroExatoIdx.localeCompare(b[1].primeiroExatoIdx)
-  );
 }
 function renderRanking(){
   const wrap=document.getElementById('rankingWrap');
