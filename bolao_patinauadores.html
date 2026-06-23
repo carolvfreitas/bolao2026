@@ -932,8 +932,61 @@ window.toggleRodada=function(el){el.classList.toggle('collapsed');el.nextElement
 
 // ===================== RANKING =====================
 function calcularPontos(){
-  const ps={};Object.keys(state.apostas).forEach(jid=>{const res=state.resultados[jid],jogo=JOGOS.find(j=>j.id===jid);state.apostas[jid].forEach(ap=>{if(!ps[ap.nome])ps[ap.nome]={pontos:0,exatos:0,detalhes:[]};const p=ps[ap.nome];if(!res){p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,pts:0,status:'Aguardando resultado'});return;}let pts=0,status='Errou';if(ap.gA===res.gA&&ap.gB===res.gB){pts=3;status='Placar exato';p.exatos++;}else{const vP=ap.gA>ap.gB?'A':ap.gA<ap.gB?'B':'E',vR=res.gA>res.gB?'A':res.gA<res.gB?'B':'E';if(vP===vR){pts=1;status='Acertou o vencedor';}}p.pontos+=pts;p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,resultado:`${res.gA}×${res.gB}`,pts,status});});});
-  return Object.entries(ps).sort((a,b)=>b[1].pontos-a[1].pontos||b[1].exatos-a[1].exatos);
+  const ps={};
+  // Processa jogos em ordem cronológica para critério de desempate "chegou primeiro"
+  const jogosOrdenados=Object.keys(state.apostas).map(jid=>JOGOS.find(j=>j.id===jid)).filter(Boolean).sort(sortJogo);
+  jogosOrdenados.forEach(jogo=>{
+    const jid=jogo.id;const res=state.resultados[jid];
+    state.apostas[jid].forEach(ap=>{
+      if(!ps[ap.nome])ps[ap.nome]={pontos:0,exatos:0,detalhes:[],jogoPrimeiroPonto:null,jogoprimeiroExato:null};
+      const p=ps[ap.nome];
+      if(!res){p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,pts:0,status:'Aguardando resultado'});return;}
+      let pts=0,status='Errou';
+      if(ap.gA===res.gA&&ap.gB===res.gB){pts=3;status='Placar exato';p.exatos++;}
+      else{const vP=ap.gA>ap.gB?'A':ap.gA<ap.gB?'B':'E',vR=res.gA>res.gB?'A':res.gA<res.gB?'B':'E';if(vP===vR){pts=1;status='Acertou o vencedor';}}
+      p.pontos+=pts;
+      p.detalhes.push({data:jogo?.data,rodada:jogo?.rodada,jogo:`${jogo?.timeA} × ${jogo?.timeB}`,placar:`${ap.gA}×${ap.gB}`,resultado:`${res.gA}×${res.gB}`,pts,status});
+    });
+  });
+  // Calcula acumulados cronológicos para desempate "chegou primeiro"
+  // Para cada participante, guarda o "jogo-chave" (índice cronológico) em que atingiu seu total de pontos/exatos
+  const ranking=Object.entries(ps);
+  ranking.forEach(([nome,dados])=>{
+    // Ordena detalhes cronologicamente
+    const det=[...dados.detalhes].sort((a,b)=>{
+      const ja=JOGOS.find(j=>j.timeA+' × '+j.timeB===a.jogo||j.timeB+' × '+j.timeA===a.jogo);
+      const jb=JOGOS.find(j=>j.timeA+' × '+j.timeB===b.jogo||j.timeB+' × '+j.timeA===b.jogo);
+      return sortJogo(ja||{data:'9999',hora:''},jb||{data:'9999',hora:''});
+    });
+    // "Chegou primeiro em X pontos" = índice do último jogo necessário para atingir X pontos
+    let acc=0,accE=0;
+    dados.primeiroPontoIdx='9999-99:99-Z'; // default: nunca chegou
+    dados.primeiroExatoIdx='9999-99:99-Z';
+    det.forEach(d=>{
+      if(d.pts>0){
+        acc+=d.pts;
+        if(acc>=dados.pontos&&dados.primeiroPontoIdx==='9999-99:99-Z'){
+          const jg=JOGOS.find(j=>j.timeA+' × '+j.timeB===d.jogo||j.timeB+' × '+j.timeA===d.jogo);
+          const hs=jg?.hora==='00:00'||jg?.hora==='01:00'?'00:'+jg.hora:jg?.hora||'99';
+          dados.primeiroPontoIdx=(d.data||'9999')+hs+d.jogo;
+        }
+      }
+      if(d.pts===3){
+        accE++;
+        if(accE>=dados.exatos&&dados.primeiroExatoIdx==='9999-99:99-Z'){
+          const jg=JOGOS.find(j=>j.timeA+' × '+j.timeB===d.jogo||j.timeB+' × '+j.timeA===d.jogo);
+          const hs=jg?.hora==='00:00'||jg?.hora==='01:00'?'00:'+jg.hora:jg?.hora||'99';
+          dados.primeiroExatoIdx=(d.data||'9999')+hs+d.jogo;
+        }
+      }
+    });
+  });
+  return ranking.sort((a,b)=>
+    (b[1].pontos-a[1].pontos)||
+    (b[1].exatos-a[1].exatos)||
+    a[1].primeiroPontoIdx.localeCompare(b[1].primeiroPontoIdx)||
+    a[1].primeiroExatoIdx.localeCompare(b[1].primeiroExatoIdx)
+  );
 }
 function atualizarRanking(){
   const wrap=document.getElementById('rankingTableWrap');if(!wrap)return;const ranking=calcularPontos();
