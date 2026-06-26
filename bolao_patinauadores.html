@@ -656,7 +656,7 @@ function renderConfigurarJogos(){
 window.salvarConfiguracaoJogo=async function(jogoId){
   const tA=document.getElementById('conf_'+jogoId+'_A')?.value;
   const tB=document.getElementById('conf_'+jogoId+'_B')?.value;
-  if(!tA||!tB){document.getElementById('conf_msg_'+jogoId).innerHTML='<span style="color:#c0392b">Selecione os dois times.</span>';return;}
+  if(!tA&&!tB){document.getElementById('conf_msg_'+jogoId).innerHTML='<span style="color:#c0392b">Selecione pelo menos um time.</span>';return;}
   // Update JOGOS array in memory
   const j=JOGOS.find(x=>x.id===jogoId);if(j){j.timeA=tA;j.timeB=tB;}
   // Save to Firebase in timesElim
