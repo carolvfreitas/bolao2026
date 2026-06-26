@@ -176,7 +176,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
     <div class="title">⚽ Bolão — Admin</div>
     <div class="subtitle">FIFA World Cup 2026</div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div class="version-tag" style="margin:0">Versão: 15/06/2026 às 19:30</div>
+      <div class="version-tag" style="margin:0">Versão: 26/06/2026 às 18:24</div>
       <button onclick="location.reload()" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:5px 12px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer">🔄 Atualizar</button>
     </div>
     <div class="tabs-main">
@@ -629,7 +629,7 @@ function renderConfigurarJogos(){
   jogos16.forEach(j=>{
     const tA=j.timeA||'';const tB=j.timeB||'';
     html+=`<div style="background:var(--cinza-bg);border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid var(--cinza-borda)">
-      <div style="font-size:.75rem;font-weight:700;color:var(--texto-sec);margin-bottom:8px">${j.id} · ${fmtData(j.data)} · ${j.local}</div>
+      <div style="font-size:.75rem;font-weight:700;color:var(--texto-sec);margin-bottom:8px">${j.id} · ${fmtData(j.data)}${j.hora?' · '+horaTag(j.hora,j.id):''} · ${j.local}</div>
       <div style="font-size:.78rem;color:var(--texto-sec);margin-bottom:8px;font-style:italic">${j.descA||''} × ${j.descB||''}</div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <select id="conf_${j.id}_A" style="flex:1;padding:7px 10px;border:1.5px solid var(--cinza-borda);border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;color:var(--texto);background:#fff">
