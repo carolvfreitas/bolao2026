@@ -934,8 +934,9 @@ function renderResultados(){
     html+=`<div class="rodada-jogos${colapsada?' collapsed':''}">`;
     porRodada[r].forEach(j=>{
       const res=resultados[j.id];
-      const placar=res?`<span class="jogo-placar">${res.gA} — ${res.gB}</span>`:`<span class="jogo-placar pendente">A jogar</span>`;
-      html+=`<div class="jogo-row"><div class="jogo-hora-data"><span class="jogo-hora">${horaTag(j.hora,j.id)}</span><span class="jogo-data-tag">${fmtData(j.data)}</span></div><div class="jogo-info"><div class="jogo-row-times">${getFlag(j.timeA)} ${j.timeA||'?'} × ${j.timeB||'?'} ${getFlag(j.timeB)}</div><div class="jogo-grupo-local">${j.grupo?'Grupo '+j.grupo+' · ':''}${j.local}</div></div>${placar}</div>`;
+      const {tA,tB}=getTimesDisplay(j);
+      const placar=res?`<div style="text-align:right"><span class="jogo-placar">${res.gA} — ${res.gB}</span>${res.pens?`<div style="font-size:.68rem;color:var(--amarelo-dark);font-weight:700;margin-top:2px">Pênaltis: ${res.pens.gA} — ${res.pens.gB}</div>`:''}</div>`:`<span class="jogo-placar pendente">A jogar</span>`;
+      html+=`<div class="jogo-row"><div class="jogo-hora-data"><span class="jogo-hora">${horaTag(j.hora,j.id)}</span><span class="jogo-data-tag">${fmtData(j.data)}</span></div><div class="jogo-info"><div class="jogo-row-times">${getFlag(tA)} ${tA||'?'} × ${tB||'?'} ${getFlag(tB)}</div><div class="jogo-grupo-local">${j.grupo?'Grupo '+j.grupo+' · ':''}${j.local}</div></div>${placar}</div>`;
     });
     html+=`</div>`;
   });
