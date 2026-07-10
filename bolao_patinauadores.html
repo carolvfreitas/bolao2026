@@ -763,7 +763,7 @@ function renderGerenciar(){
     const apostasMap={};(state.apostas[j.id]||[]).forEach(a=>{apostasMap[a.nome]=a;});
     const res=state.resultados[j.id];
     const {tA,tB}=getTimesDisplay(j);
-    const travado=jogoTravadoAdmin(j)||!!res;
+    const travado=false;
     const resTag=res?`<span style="font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--amarelo);margin-left:8px">${res.gA}—${res.gB}${res.pens?' (pen '+res.pens.gA+'—'+res.pens.gB+')':''}</span>`:`<span style="font-size:.72rem;color:rgba(255,255,255,.5);margin-left:8px">Aguardando resultado</span>`;
     const travadoBadge=travado&&j.hora?`<span style="font-size:.7rem;background:rgba(255,0,0,.2);color:#fca5a5;padding:1px 6px;border-radius:6px;margin-left:6px">🔒</span>`:'';
     const jogoDate=new Date(j.data+'T12:00:00-03:00');const apos12h=new Date()>=jogoDate;
