@@ -165,7 +165,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
   <div class="admin-login-box">
     <div class="admin-login-title">🔒 Admin</div>
     <div class="admin-login-sub">Bolão dos PatiNANAUdores</div>
-    <div style="font-size:.72rem;color:var(--texto-sec);margin-bottom:16px">Versão: 04/07/2026 às 01:48</div>
+    <div style="font-size:.72rem;color:var(--texto-sec);margin-bottom:16px">Versão final: 19/07/2026 às 19:07</div>
     <div id="adminLoginMsg"></div>
     <input type="password" id="adminSenha" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')verificarSenhaAdmin()">
     <button class="btn btn-azul" style="width:100%" onclick="verificarSenhaAdmin()">Entrar</button>
@@ -178,7 +178,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cinza-bg);color:var(--text
     <div class="title">⚽ Bolão — Admin</div>
     <div class="subtitle">FIFA World Cup 2026</div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div class="version-tag" style="margin:0">Versão: 04/07/2026 às 01:48</div>
+      <div class="version-tag" style="margin:0">Versão final: 19/07/2026 às 19:07</div>
       <button onclick="location.reload()" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:5px 12px;border-radius:6px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer">🔄 Atualizar</button>
     </div>
     <div class="tabs-main">
@@ -961,6 +961,18 @@ function calcularPontos(){
     });
   });
 
+
+  // ===== PÓDIO =====
+  const RESULTADO_PODIO={campeao:'Espanha',vice:'Argentina',terceiro:'Inglaterra'};
+  if(state.podio&&state.podio.length&&RESULTADO_PODIO.campeao){
+    state.podio.forEach(p=>{
+      if(!ps[p.nome])ps[p.nome]={pontos:0,exatos:0,detalhes:[],_ptsCron:[],_exCron:[]};
+      const pp=ps[p.nome];
+      if(p.campeao&&p.campeao===RESULTADO_PODIO.campeao){pp.pontos+=15;pp.detalhes.push({data:'2026-07-19',rodada:'final',jogo:'Pódio — Campeão',placar:p.campeao,resultado:RESULTADO_PODIO.campeao,pts:15,status:'Acertou o Campeão'});pp._ptsCron.push(pp.pontos);}
+      if(p.vice&&p.vice===RESULTADO_PODIO.vice){pp.pontos+=10;pp.detalhes.push({data:'2026-07-19',rodada:'final',jogo:'Pódio — Vice',placar:p.vice,resultado:RESULTADO_PODIO.vice,pts:10,status:'Acertou o Vice'});pp._ptsCron.push(pp.pontos);}
+      if(p.terceiro&&p.terceiro===RESULTADO_PODIO.terceiro){pp.pontos+=5;pp.detalhes.push({data:'2026-07-18',rodada:'terceiro',jogo:'Pódio — 3º Lugar',placar:p.terceiro,resultado:RESULTADO_PODIO.terceiro,pts:5,status:'Acertou o 3º Lugar'});pp._ptsCron.push(pp.pontos);}
+    });
+  }
   return Object.entries(ps).sort((a,b)=>{
     // 1. Mais pontos
     if(b[1].pontos!==a[1].pontos)return b[1].pontos-a[1].pontos;
