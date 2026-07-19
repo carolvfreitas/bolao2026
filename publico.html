@@ -974,6 +974,18 @@ function calcularPontos(){
     });
   });
 
+
+  // ===== PÓDIO =====
+  const RESULTADO_PODIO={campeao:'Espanha',vice:'Argentina',terceiro:'Inglaterra'};
+  if(dadosGlobais.podio&&dadosGlobais.podio.length&&RESULTADO_PODIO.campeao){
+    dadosGlobais.podio.forEach(p=>{
+      if(!ps[p.nome])ps[p.nome]={pontos:0,exatos:0,detalhes:[],_ptsCron:[],_exCron:[]};
+      const pp=ps[p.nome];
+      if(p.campeao&&p.campeao===RESULTADO_PODIO.campeao){pp.pontos+=15;pp.detalhes.push({data:'2026-07-19',rodada:'final',jogo:'Pódio — Campeão',placar:p.campeao,resultado:RESULTADO_PODIO.campeao,pts:15,status:'Acertou o Campeão'});pp._ptsCron.push(pp.pontos);}
+      if(p.vice&&p.vice===RESULTADO_PODIO.vice){pp.pontos+=10;pp.detalhes.push({data:'2026-07-19',rodada:'final',jogo:'Pódio — Vice',placar:p.vice,resultado:RESULTADO_PODIO.vice,pts:10,status:'Acertou o Vice'});pp._ptsCron.push(pp.pontos);}
+      if(p.terceiro&&p.terceiro===RESULTADO_PODIO.terceiro){pp.pontos+=5;pp.detalhes.push({data:'2026-07-18',rodada:'terceiro',jogo:'Pódio — 3º Lugar',placar:p.terceiro,resultado:RESULTADO_PODIO.terceiro,pts:5,status:'Acertou o 3º Lugar'});pp._ptsCron.push(pp.pontos);}
+    });
+  }
   return Object.entries(ps).sort((a,b)=>{
     // 1. Mais pontos
     if(b[1].pontos!==a[1].pontos)return b[1].pontos-a[1].pontos;
