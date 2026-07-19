@@ -1,3 +1,4 @@
+<!-- v20260719221336 -->
 <!-- build: 2026-07-04T04:59:20.730818 -->
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -502,7 +503,9 @@ const ROD_LABELS={'1':'1ª Rodada','2':'2ª Rodada','3':'3ª Rodada','16avos':'1
 const MADRUGADA_DIA_SEGUINTE={'M5':'14/06','M20':'17/06','M29':'20/06','M44':'23/06','M65':'27/06','M66':'27/06'};
 const PAISES=[{nome:"África do Sul",flag:"🇿🇦"},{nome:"Alemanha",flag:"🇩🇪"},{nome:"Arabia Saudita",flag:"🇸🇦"},{nome:"Argélia",flag:"🇩🇿"},{nome:"Argentina",flag:"🇦🇷"},{nome:"Áustria",flag:"🇦🇹"},{nome:"Austrália",flag:"🇦🇺"},{nome:"Bélgica",flag:"🇧🇪"},{nome:"Bósnia e Herzegovina",flag:"🇧🇦"},{nome:"Brasil",flag:"🇧🇷"},{nome:"Cabo Verde",flag:"🇨🇻"},{nome:"Canadá",flag:"🇨🇦"},{nome:"Catar",flag:"🇶🇦"},{nome:"Colômbia",flag:"🇨🇴"},{nome:"Coreia do Sul",flag:"🇰🇷"},{nome:"Costa do Marfim",flag:"🇨🇮"},{nome:"Croácia",flag:"🇭🇷"},{nome:"Curaçao",flag:"🇨🇼"},{nome:"Egito",flag:"🇪🇬"},{nome:"Equador",flag:"🇪🇨"},{nome:"Escócia",flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿"},{nome:"Espanha",flag:"🇪🇸"},{nome:"Estados Unidos",flag:"🇺🇸"},{nome:"França",flag:"🇫🇷"},{nome:"Gana",flag:"🇬🇭"},{nome:"Haiti",flag:"🇭🇹"},{nome:"Holanda",flag:"🇳🇱"},{nome:"Inglaterra",flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿"},{nome:"Iraque",flag:"🇮🇶"},{nome:"Irã",flag:"🇮🇷"},{nome:"Japão",flag:"🇯🇵"},{nome:"Jordânia",flag:"🇯🇴"},{nome:"Marrocos",flag:"🇲🇦"},{nome:"México",flag:"🇲🇽"},{nome:"Noruega",flag:"🇳🇴"},{nome:"Nova Zelândia",flag:"🇳🇿"},{nome:"Panamá",flag:"🇵🇦"},{nome:"Paraguai",flag:"🇵🇾"},{nome:"Portugal",flag:"🇵🇹"},{nome:"RD Congo",flag:"🇨🇩"},{nome:"República Tcheca",flag:"🇨🇿"},{nome:"Senegal",flag:"🇸🇳"},{nome:"Suécia",flag:"🇸🇪"},{nome:"Suíça",flag:"🇨🇭"},{nome:"Tunísia",flag:"🇹🇳"},{nome:"Turquia",flag:"🇹🇷"},{nome:"Uruguai",flag:"🇺🇾"},{nome:"Uzbequistão",flag:"🇺🇿"}];
 
-// ===================== STATE =====================
+// Mapa global de países para flags (usado no pódio)
+window.PAISES_MAP=Object.fromEntries(PAISES.map(p=>[p.nome,p.flag]));
+
 let currentUser = null;
 let currentNome = null;
 let dadosGlobais = { apostas:{}, resultados:{}, podio:[], jogosSalvos:[] };
@@ -911,7 +914,17 @@ window.salvarAposta=async function(jogoId,timeA,timeB){
 function renderPodio(){
   const wrap=document.getElementById('podioWrap');
   if(!dadosGlobais.podio||!dadosGlobais.podio.length){wrap.innerHTML=`<div class="empty-state"><div class="icon">🏆</div>Nenhum palpite de pódio registrado ainda.</div>`;return;}
-  wrap.innerHTML=`<div style="overflow-x:auto"><table class="podio-table"><thead><tr><th>Participante</th><th>🥇 Campeão</th><th>🥈 Vice</th><th>🥉 3º Lugar</th></tr></thead><tbody>${[...dadosGlobais.podio].sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR')).map(p=>`<tr><td class="nome-cell">${p.nome}</td><td>${renderPaisCell(p.campeao)}</td><td>${renderPaisCell(p.vice)}</td><td>${renderPaisCell(p.terceiro)}</td></tr>`).join('')}</tbody></table></div>`;
+  wrap.innerHTML=`<div style="overflow-x:auto"><table class="podio-table"><thead><tr><th>Participante</th><th>🥇 Campeão</th><th>🥈 Vice</th><th>🥉 3º Lugar</th></tr></thead><tbody>${[...dadosGlobais.podio].sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR')).map(p=>{
+  const PODIO_RESULT={campeao:'Espanha',vice:'Argentina',terceiro:'Inglaterra'};
+  function cellPodio(palpite,correto){
+    if(!palpite||!palpite.trim())return'<span style="color:#ccc;font-size:.8rem">Não informado</span>';
+    const acertou=palpite===correto;
+    const flag=window.PAISES_MAP?window.PAISES_MAP[palpite]||'🏳️':'🏳️';
+    if(acertou)return`<div style="display:flex;align-items:center;gap:5px;font-weight:800;color:var(--verde-dark)"><span style="font-size:1.1rem">${flag}</span><span>${palpite}</span><span style="background:var(--verde);color:#fff;font-size:.65rem;padding:1px 6px;border-radius:8px;font-weight:700">✓</span></div>`;
+    return`<div style="display:flex;align-items:center;gap:5px;opacity:.35"><span style="font-size:1.1rem">${flag}</span><span style="font-size:.85rem">${palpite}</span></div>`;
+  }
+  return`<tr><td class="nome-cell">${p.nome}</td><td>${cellPodio(p.campeao,PODIO_RESULT.campeao)}</td><td>${cellPodio(p.vice,PODIO_RESULT.vice)}</td><td>${cellPodio(p.terceiro,PODIO_RESULT.terceiro)}</td></tr>`;
+}).join('')}</tbody></table></div>`;
 }
 
 // ===================== RESULTADOS =====================
